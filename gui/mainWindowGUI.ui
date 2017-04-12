@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1203</width>
-    <height>624</height>
+    <width>774</width>
+    <height>557</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -204,6 +204,28 @@ p, li { white-space: pre-wrap; }
                      <property name="verticalSpacing">
                       <number>20</number>
                      </property>
+                     <item row="2" column="1">
+                      <widget class="QLineEdit" name="perimetro_parede_le_carg_laje"/>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QComboBox" name="caso_parede_cbox_carg_laje">
+                       <item>
+                        <property name="text">
+                         <string>Laje em cruz</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Paralelo ao menor vão</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Perpendicular ao menor vão</string>
+                        </property>
+                       </item>
+                      </widget>
+                     </item>
                      <item row="0" column="0">
                       <widget class="QLabel" name="label_6">
                        <property name="text">
@@ -228,27 +250,15 @@ p, li { white-space: pre-wrap; }
                      <item row="1" column="1">
                       <widget class="QLineEdit" name="espessura_parede_le_carg_laje"/>
                      </item>
-                     <item row="2" column="1">
-                      <widget class="QLineEdit" name="perimetro_parede_le_carg_laje"/>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QComboBox" name="caso_parede_cbox_carg_laje">
-                       <item>
-                        <property name="text">
-                         <string>Laje em cruz</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>Paralelo ao menor vão</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>Perpendicular ao menor vão</string>
-                        </property>
-                       </item>
+                     <item row="3" column="0">
+                      <widget class="QLabel" name="label_30">
+                       <property name="text">
+                        <string>Altura (cm)</string>
+                       </property>
                       </widget>
+                     </item>
+                     <item row="3" column="1">
+                      <widget class="QLineEdit" name="altura_parede_le_carg_laje"/>
                      </item>
                     </layout>
                    </item>
@@ -447,7 +457,7 @@ p, li { white-space: pre-wrap; }
                  <widget class="QTextBrowser" name="textBrowser_carg_laje">
                   <property name="minimumSize">
                    <size>
-                    <width>500</width>
+                    <width>0</width>
                     <height>0</height>
                    </size>
                   </property>
@@ -735,6 +745,20 @@ p, li { white-space: pre-wrap; }
               </item>
              </layout>
             </widget>
+            <widget class="QWidget" name="tab_10">
+             <attribute name="title">
+              <string>Verificações</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_28">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_27">
+                <item row="0" column="0">
+                 <widget class="QTextBrowser" name="textBrowser_verif_laje"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
          </layout>
@@ -760,7 +784,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1203</width>
+     <width>774</width>
      <height>21</height>
     </rect>
    </property>

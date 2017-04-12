@@ -2,6 +2,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
 from gui.mainWindowGUI import Ui_MainWindow
+from gui.lib import *
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -10,6 +11,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.setWindowIcon(QIcon('./img/icon_64.ico'))
+
+        self.actionSair.triggered.connect(sys.exit)
 
         self.showMaximized()
 
