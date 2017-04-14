@@ -15,3 +15,12 @@ def get_text(obj):
         return obj.currentItem().text()
     elif str(type(obj)) == "<class 'PyQt4.QtGui.QComboBox'>":
         return obj.currentText()
+    elif str(type(obj)) == "<class 'PyQt4.QtGui.QTableWidgetItem'>":
+        return obj.text()
+
+
+def get_enabled(obj):
+    if obj.isEnabled():
+        return get_text(obj)
+    else:
+        return None

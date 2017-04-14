@@ -7,3 +7,5 @@ class InputData:
         self.vigas = vigas
         self.pilares = pilares
         self.config = config
+        self.table_rows_compat_lajes = []
+        self.table_rows_compat_lajes_indices = []

@@ -2,7 +2,8 @@ from cx_Freeze import setup, Executable
 
 # executable options
 script = 'main.py'
-base = 'Win32GUI'       # Win32GUI para gui's e None para console
+base = None
+# base = 'Win32GUI'       # Win32GUI para gui's e None para console
 icon = 'icon_64.ico'
 targetName = 'Dynapy TLCD Analyser.exe'
 

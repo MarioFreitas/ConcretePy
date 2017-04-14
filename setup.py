@@ -10,6 +10,6 @@ setup(name='ConcretePy',
       packages=['C:\Python34\Lib\site-packages\ConcretePy'],
       install_requires=[
           'numpy',
-          'matplotlib'
+          'matplotlib', 'ConcretePy'
       ],
       zip_safe=False)
