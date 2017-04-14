@@ -1,19 +1,37 @@
+import numpy as np
+from ConcretePy.Concrete.configurações import Configurações
+from ConcretePy.Concrete.barras import barras
+
+
 class Laje:
-    def __init__(self, numero, lx, ly, h, apoio):
+    def __init__(self, numero, lx, ly, h, apoio, config=Configurações()):
+        # Caracterização da laje
         self.numero = numero
         self.lx = lx
         self.ly = ly
         self.h = h
         self.apoio = apoio
+        self.config = config
 
         self.lamb = self.ly / self.lx
 
+        # Carregamento
         self.carga = None
+
+        # Coeficientes de Marcus
         self.kx = None
         self.mx = None
         self.nx = None
         self.my = None
         self.ny = None
+
+        # Momentos
+        self.Mx = None
+        self.My = None
+        self.Xx1 = None
+        self.Xx2 = None
+        self.Xy1 = None
+        self.Xy2 = None
 
     def calc_cargas(self,
                     superior_espessura, superior_densidade,
@@ -21,47 +39,221 @@ class Laje:
                     contrapiso_espessura, contrapiso_densidade,
                     parede_caso, parede_espessura, parede_perimetro, parede_altura,
                     carga_utilizacao):
-        self.carga = Load(superior_espessura, superior_densidade,
-                          inferior_espessura, inferior_densidade,
-                          contrapiso_espessura, contrapiso_densidade,
-                          parede_caso, parede_espessura, parede_perimetro, parede_altura,
-                          carga_utilizacao,
-                          self.lx, self.ly)
+        self.carga = Carga(superior_espessura, superior_densidade,
+                           inferior_espessura, inferior_densidade,
+                           contrapiso_espessura, contrapiso_densidade,
+                           parede_caso, parede_espessura, parede_perimetro, parede_altura,
+                           carga_utilizacao,
+                           self.lx, self.ly, self.h)
 
-    def calc_momentos(self, kx=None, mx=None, nx=None, my=None, ny=None):
+    def calc_momentos(self, kx=0, mx=0, nx=0, my=0, ny=0):
         self.kx = kx
         self.mx = mx
         self.nx = nx
         self.my = my
         self.ny = ny
 
-        # TODO definir momentos para lambda > 2 e lambda < 2
+        if self.lamb <= 2:
+            self.Mx = Momento(self.carga.carga_total * (self.lx ** 2) / self.mx, 'Mx')
+            self.My = Momento(self.carga.carga_total * (self.lx ** 2) / self.my, 'My')
 
-    def compatibilizar_momentos(self):
-        pass
-        # TODO compatibilizar momentos
+            try:
+                Xx1 = Momento(self.carga.carga_total * (self.lx ** 2) / self.nx, 'Xx')
+            except ZeroDivisionError:
+                pass
+            try:
+                Xx2 = Momento(self.carga.carga_total * (self.lx ** 2) / self.nx, 'Xx')
+            except ZeroDivisionError:
+                pass
+            try:
+                Xy1 = Momento(self.carga.carga_total * (self.lx ** 2) / self.ny, 'Xy')
+            except ZeroDivisionError:
+                pass
+            try:
+                Xy2 = Momento(self.carga.carga_total * (self.lx ** 2) / self.ny, 'Xy')
+            except:
+                pass
 
-    def dimensionar(self):
-        pass
-        # TODO dimensionar para os momentos
+            if self.apoio == 'Caso 1':
+                pass
+            elif self.apoio == 'Caso 2A':
+                self.Xx1 = Xx1
+            elif self.apoio == 'Caso 2B':
+                self.Xy1 = Xy1
+            elif self.apoio == 'Caso 3':
+                self.Xx1 = Xx1
+                self.Xy1 = Xy1
+            elif self.apoio == 'Caso 4A':
+                self.Xx1 = Xx1
+                self.Xx2 = Xx2
+            elif self.apoio == 'Caso 4B':
+                self.Xy1 = Xy1
+                self.Xy2 = Xy2
+            elif self.apoio == 'Caso 5A':
+                self.Xx1 = Xx1
+                self.Xx2 = Xx2
+                self.Xy1 = Xy1
+            elif self.apoio == 'Caso 5B':
+                self.Xx1 = Xx1
+                self.Xy1 = Xy1
+                self.Xy2 = Xy2
+            elif self.apoio == 'Caso 6':
+                self.Xx1 = Xx1
+                self.Xx2 = Xx2
+                self.Xy1 = Xy1
+                self.Xy2 = Xy2
+        else:
+            # TODO caso de lambda > 2
+            pass
 
-    def verificar_tudo(self):
-        pass
-        # TODO verificar itens de norma
+    def dimensionar(self, M, momento, diametro=0.005, vizinho=None):
+        while True:
+            d = self.h - self.config.c_laje - diametro / 2
 
-    def calc_ancoragem(self):
-        pass
-        # TODO calcular ancoragens
+            Msd = self.config.gama_f * M
+            kmd = Msd / (self.config.fcd * d ** 2)
+            kx = (1 - np.sqrt(1 - 2 * kmd / self.config.alfa_c)) / self.config.lamb
+            kz = 1 - 0.5 * self.config.lamb * kx
+            As = Msd / (kz * d * self.config.fyd)
+
+            A_barra = np.pi * (diametro / 2) ** 2
+            n = As / A_barra
+            espaçamento = (1 - n * diametro) / n
+
+            if not self.verificar_tudo(kmd, As, diametro, espaçamento, momento):
+                print(barras)
+                diametro = barras[barras.index(diametro) + 1]
+                continue
+            else:
+                break
+
+        dominio = self.verificar_domínio(kx)
+
+        if momento.tipo == 'Mx':
+            comprimento = self.lx
+        elif momento.tipo == 'My':
+            comprimento = self.ly
+        elif momento.tipo == 'Xx1' or momento.tipo == 'Xx2':
+            comprimento = 0.25 * self.lx + 0.25 * vizinho.lx
+        elif momento.tipo == 'Xy1' or momento.tipo == 'Xy2':
+            comprimento = 0.25 * self.ly + 0.25 * vizinho.ly
+
+        momento.armadura.update({vizinho: Armadura(diametro, espaçamento, comprimento, d, kmd, kx, kz, As, dominio)})
+
+    def dimensionar_todos(self, momento, diametro=0.005):
+        for vizinho, M in momento.momento_compt.items():
+            self.dimensionar(M, momento, diametro, vizinho)
+
+    def verificar_kmdlim(self, kmd):
+        fck = self.config.fck
+        if fck <= 50e6:
+            if kmd <= 0.251:
+                return True
+        elif fck <= 55e6:
+            if kmd <= 0.197:
+                return True
+        elif fck <= 60e6:
+            if kmd <= 0.189:
+                return True
+        elif fck <= 65e6:
+            if kmd <= 0.182:
+                return True
+        elif fck <= 70e6:
+            if kmd <= 0.174:
+                return True
+        elif fck <= 75e6:
+            if kmd <= 0.167:
+                return True
+        elif fck <= 80e6:
+            if kmd <= 0.160:
+                return True
+        elif fck <= 85e6:
+            if kmd <= 0.153:
+                return True
+        elif fck <= 90e6:
+            if kmd <= 0.146:
+                return True
+        return False
+
+    def verificar_domínio(self, kx):
+        kxlim23 = 0.259
+        kxlim34 = 0.628
+        kxlim44a = 1
+        if kx < kxlim23:
+            return 'Domínio 1 ou 2'
+        elif kx < kxlim34:
+            return 'Dominio 3'
+        elif kx < kxlim34:
+            return 'Domínio 4'
+        else:
+            return 'Domínio 4a ou 5'
+
+    def verificar_taxa_de_armadura(self, As):
+        h = self.h
+        fck = self.config.fck
+
+        if fck <= 30e6:
+            rho_min = 0.0015
+        elif fck <= 35e6:
+            rho_min = 0.00164
+        elif fck <= 40e6:
+            rho_min = 0.00179
+        elif fck <= 45e6:
+            rho_min = 0.00194
+        elif fck <= 50e6:
+            rho_min = 0.00208
+        elif fck <= 55e6:
+            rho_min = 0.00211
+        elif fck <= 60e6:
+            rho_min = 0.00219
+        elif fck <= 65e6:
+            rho_min = 0.00226
+        elif fck <= 70e6:
+            rho_min = 0.00233
+        elif fck <= 75e6:
+            rho_min = 0.00239
+        elif fck <= 80e6:
+            rho_min = 0.00245
+        elif fck <= 85e6:
+            rho_min = 0.00251
+        elif fck <= 90e6:
+            rho_min = 0.00256
+
+        Asmin = rho_min * 1 * h
+        Asmax = 0.04 * 1 * h
+
+        return Asmin < As < h
+
+    def verificar_bitola(self, diametro):
+        return diametro < self.h/8
+
+    def verificar_espaçamento(self, espaçamento, momento):
+        if momento.tipo == 'Mx' or momento.tipo == 'Xx1' or momento.tipo == 'Xx2':
+            s_max = min(2*self.h, 0.2)
+        else:
+            s_max = 0.33
+
+        s_min = 0.1
+
+        return s_min < espaçamento < s_max
+
+    def verificar_tudo(self, kmd, As, diametro, espaçamento, momento):
+        # print(self.verificar_kmdlim(kmd), self.verificar_taxa_de_armadura(As),
+        #       self.verificar_bitola(diametro), self.verificar_espaçamento(espaçamento, momento))
+        return self.verificar_kmdlim(kmd) and self.verificar_taxa_de_armadura(As) and \
+               self.verificar_bitola(diametro) and self.verificar_espaçamento(espaçamento, momento)
+
+    def __repr__(self):
+        return 'Laje L{}'.format(self.numero)
 
 
-class Load:
+class Carga:
     def __init__(self,
                  superior_espessura, superior_densidade,
                  inferior_espessura, inferior_densidade,
                  contrapiso_espessura, contrapiso_densidade,
                  parede_caso, parede_espessura, parede_perimetro, parede_altura,
-                 carga_utilizacao,
-                 lx, ly):
+                 carga_utilizacao, lx, ly, h):
         self.superior_espessura = superior_espessura
         self.superior_densidade = superior_densidade
         self.inferior_espessura = inferior_espessura
@@ -78,14 +270,72 @@ class Load:
         self.inferior_carga = self.inferior_espessura * self.inferior_densidade
         self.contrapiso_carga = self.contrapiso_espessura * self.contrapiso_densidade
 
+        self.parede_densidade = 13000 * (self.parede_espessura - 0.05) + 21000 * 0.05
         if self.parede_perimetro == 0 or self.parede_espessura == 0:
-            pass
+            self.parede_carga = 0
         elif self.parede_caso == 'Laje em cruz':
-            self.parede_carga = self.parede_espessura * self.parede_perimetro * self.parede_altura / (lx * ly)
+            self.parede_carga = self.parede_densidade * self.parede_perimetro * self.parede_altura / (lx * ly)
         elif self.parede_caso == 'Paralelo ao menor vão':
-            self.parede_carga = 2 * self.parede_espessura * self.parede_altura * self.parede_perimetro / (lx ** 2)
+            self.parede_carga = 2 * self.parede_densidade * self.parede_altura * self.parede_perimetro / (lx ** 2)
         elif self.parede_caso == 'Perpendicular ao menor vão':
             raise AttributeError('Dimensionar como viga!')
 
-        self.carga_permanente = self.superior_carga + self.inferior_carga + self.contrapiso_carga + self.parede_carga
+        self.peso_próprio = h * 25000
+
+        self.carga_permanente = self.superior_carga + self.inferior_carga + self.contrapiso_carga + self.parede_carga + \
+                                self.peso_próprio
         self.carga_total = self.carga_utilizacao + self.carga_permanente
+
+
+class Momento:
+    def __init__(self, momento_calc, tipo):
+        self.momento_calc = momento_calc
+        self.tipo = tipo
+
+        self.momento_compt = {None: self.momento_calc}
+        self.armadura = {}
+
+    def compatibilizar_momentos(self, other):
+        if None in self.momento_compt:
+            self.momento_compt = {}
+        if None in other.momento_compt:
+            other.momento_compt = {}
+
+        mc = max((self.momento_calc + other.momento_calc) / 2, 0.8 * max(self.momento_calc, other.momento_calc))
+        self.momento_compt.update({other: mc})
+        other.momento_compt.update({self: mc})
+
+
+class Armadura:
+    def __init__(self, diametro, espaçamento, comprimento, d, kmd, kx, kz, As, domínio):
+        self.diametro = diametro
+        self.espaçamento = espaçamento
+        self.comprimento = comprimento
+        self.d = d
+        self.kmd = kmd
+        self.kx = kx
+        self.kz = kz
+        self.As = As
+        self.domínio = domínio
+
+    def __repr__(self):
+        return 'Diâmetro: {}\nEspaçamento: {}\nComprimento: {}\nAltura útil: {}'.format(self.diametro, self.espaçamento,
+                                                                                        self.comprimento, self.d)
+
+
+if __name__ == '__main__':
+    laje1 = Laje(1, 6, 6, .12, 'Caso 1')
+    laje1.calc_cargas(0.007, 18000, 0.015, 12500, 0.015, 21000, 'Laje em cruz', 0.15, 2, 2.6, 2000)
+    laje1.calc_momentos(kx=0.5, mx=27.4, my=27.4)
+    laje1.dimensionar_todos(laje1.Mx)
+    # laje1.dimensionar_todos(laje1.My)
+    print(laje1)
+    # print(laje1.carga.superior_carga, laje1.carga.inferior_carga, laje1.carga.contrapiso_carga,
+    #       laje1.carga.parede_carga, laje1.carga.peso_próprio)
+    # print(laje1.carga.carga_total)
+    # print(laje1.Mx.momento_calc)
+    # print(laje1.Mx.armadura[None])
+    # print(laje1.Mx.armadura[None].domínio)
+    laje1.dimensionar_todos(laje1.Mx, barras[1])
+    print(laje1.Mx.armadura[None])
+    print(laje1.Mx.armadura[None].domínio)
