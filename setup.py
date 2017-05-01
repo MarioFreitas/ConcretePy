@@ -1,7 +1,8 @@
-from setuptools import setup
+# from setuptools import setup
+from distutils.core import setup
 
 setup(name='ConcretePy',
-      version='0.1',
+      version='0.1.1',
       description='Reinforced Concrete Design Application',
       url='https://github.com/MarioRaul/ConcretePy',
       author='Mario Freitas',

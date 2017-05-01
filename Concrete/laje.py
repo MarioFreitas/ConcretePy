@@ -1,10 +1,10 @@
 import numpy as np
-from ConcretePy.Concrete.configurações import Configurações
-from ConcretePy.Concrete.barras import barras
+from ConcretePy.Concrete.configuracoes import Configuracoes
+from ConcretePy.Concrete.tabelas import *
 
 
 class Laje:
-    def __init__(self, numero, lx, ly, h, apoio, config=Configurações()):
+    def __init__(self, numero, lx, ly, h, apoio, config=Configuracoes()):
         # Caracterização da laje
         self.numero = numero
         self.lx = lx
@@ -157,10 +157,10 @@ class Carga:
         elif self.parede_caso == 'Perpendicular ao menor vão':
             raise AttributeError('Dimensionar como viga!')
 
-        self.peso_próprio = h * 25000
+        self.peso_proprio = h * 25000
 
         self.carga_permanente = self.superior_carga + self.inferior_carga + self.contrapiso_carga + self.parede_carga + \
-                                self.peso_próprio
+                                self.peso_proprio
         self.carga_total = self.carga_utilizacao + self.carga_permanente
 
 
@@ -230,7 +230,7 @@ class Momento:
             if flag:
                 break
 
-        dominio = self.verificar_domínio(kx)
+        dominio = self.verificar_dominio(kx)
 
         if self.tipo == 'Mx':
             comprimento = self.lx
@@ -278,14 +278,14 @@ class Momento:
                 return True
         return False
 
-    def verificar_domínio(self, kx):
+    def verificar_dominio(self, kx):
         kxlim23 = 0.259
         kxlim34 = 0.628
         kxlim44a = 1
         if kx < kxlim23:
             return 'Domínio 1 ou 2'
         elif kx < kxlim34:
-            return 'Dominio 3'
+            return 'Domínio 3'
         elif kx < kxlim34:
             return 'Domínio 4'
         else:
@@ -348,7 +348,7 @@ class Momento:
 
 
 class Armadura:
-    def __init__(self, diametro, espacamento, comprimento, d, kmd, kx, kz, As, domínio):
+    def __init__(self, diametro, espacamento, comprimento, d, kmd, kx, kz, As, dominio):
         self.diametro = diametro
         self.espacamento = espacamento
         self.comprimento = comprimento
@@ -357,7 +357,7 @@ class Armadura:
         self.kx = kx
         self.kz = kz
         self.As = As
-        self.domínio = domínio
+        self.dominio = dominio
 
     def __repr__(self):
         s = '''Diâmetro: {:.1f} mm
@@ -372,13 +372,6 @@ if __name__ == '__main__':
     laje1.calc_cargas(0.007, 18000, 0.015, 12500, 0.015, 21000, 'Laje em cruz', 0.15, 2, 2.6, 2000)
     laje1.calc_momentos(mx=4.23, my=4.23)
     laje1.Mx.dimensionar_todos()
-    # laje1.dimensionar_todos(laje1.My)
     print(laje1)
-    # print(laje1.carga.superior_carga, laje1.carga.inferior_carga, laje1.carga.contrapiso_carga,
-    #       laje1.carga.parede_carga, laje1.carga.peso_próprio)
-    # print(laje1.carga.carga_total)
-    # print(laje1.Mx.momento_calc)
-    # print(laje1.Mx.armadura[None])
-    # print(laje1.Mx.armadura[None].domínio)
     print(laje1.Mx.armadura[None])
-    print(laje1.Mx.armadura[None].domínio)
+    print(laje1.Mx.armadura[None].dominio)

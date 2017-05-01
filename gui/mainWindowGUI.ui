@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>811</width>
-    <height>526</height>
+    <width>825</width>
+    <height>471</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -26,13 +26,13 @@
          <bool>false</bool>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
           <string>Lajes</string>
          </attribute>
-         <layout class="QGridLayout" name="gridLayout_4">
+         <layout class="QGridLayout" name="gridLayout_6">
           <item row="0" column="0">
            <widget class="QTabWidget" name="tabWidget_laje">
             <property name="currentIndex">
@@ -42,15 +42,25 @@
              <attribute name="title">
               <string>Caracterização</string>
              </attribute>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_5">
-                <item>
+             <layout class="QGridLayout" name="gridLayout_23">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget" native="true">
                  <layout class="QGridLayout" name="gridLayout_7">
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label">
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_2">
                     <property name="text">
-                     <string>Número da laje</string>
+                     <string>Comprimento da direção principal (cm)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_22">
+                    <property name="text">
+                     <string>Tipo de Apoio</string>
                     </property>
                    </widget>
                   </item>
@@ -63,66 +73,10 @@
                     </item>
                    </widget>
                   </item>
-                  <item row="5" column="0" colspan="2">
-                   <widget class="QPushButton" name="add_btn_carac_laje">
-                    <property name="text">
-                     <string>Adicionar Laje</string>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="6" column="0" colspan="2">
                    <widget class="QPushButton" name="remov_btn_carac_laje">
                     <property name="text">
                      <string>Remover Laje</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QLineEdit" name="ly_le_carac_laje">
-                    <property name="placeholderText">
-                     <string>ly</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_2">
-                    <property name="text">
-                     <string>Comprimento da direção principal (cm)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QLineEdit" name="lx_le_carac_laje">
-                    <property name="placeholderText">
-                     <string>lx</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_4">
-                    <property name="text">
-                     <string>Espessura de pré-dimensionamento (cm)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QLineEdit" name="h_le_carac_laje">
-                    <property name="placeholderText">
-                     <string>h</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_3">
-                    <property name="text">
-                     <string>Comprimento da direção secundária (cm)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="0">
-                   <widget class="QLabel" name="label_22">
-                    <property name="text">
-                     <string>Tipo de Apoio</string>
                     </property>
                    </widget>
                   </item>
@@ -175,25 +129,72 @@
                     </item>
                    </widget>
                   </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="lx_le_carac_laje">
+                    <property name="placeholderText">
+                     <string>lx</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_4">
+                    <property name="text">
+                     <string>Espessura de pré-dimensionamento (cm)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="h_le_carac_laje">
+                    <property name="placeholderText">
+                     <string>h</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_3">
+                    <property name="text">
+                     <string>Comprimento da direção secundária (cm)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0" colspan="2">
+                   <widget class="QPushButton" name="add_btn_carac_laje">
+                    <property name="text">
+                     <string>Adicionar Laje</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="ly_le_carac_laje">
+                    <property name="placeholderText">
+                     <string>ly</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label">
+                    <property name="text">
+                     <string>Número da laje</string>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
-                </item>
-                <item>
-                 <widget class="QTextBrowser" name="textBrowser_carc_laje">
-                  <property name="font">
-                   <font>
-                    <pointsize>14</pointsize>
-                   </font>
-                  </property>
-                  <property name="html">
-                   <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_carc_laje">
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
+                 <property name="html">
+                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+                 </property>
+                </widget>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -201,211 +202,36 @@ p, li { white-space: pre-wrap; }
              <attribute name="title">
               <string>Cargas</string>
              </attribute>
-             <layout class="QGridLayout" name="gridLayout_6">
-              <item row="0" column="2">
-               <layout class="QGridLayout" name="gridLayout_5">
-                <item row="3" column="0" colspan="2">
-                 <widget class="QGroupBox" name="groupBox_4">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="title">
-                   <string>Parede</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>false</bool>
-                  </property>
-                  <layout class="QGridLayout" name="gridLayout_16">
-                   <item row="0" column="0">
-                    <layout class="QGridLayout" name="gridLayout_15">
-                     <property name="verticalSpacing">
-                      <number>20</number>
-                     </property>
-                     <item row="2" column="1">
-                      <widget class="QLineEdit" name="perimetro_parede_le_carg_laje"/>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QComboBox" name="caso_parede_cbox_carg_laje">
-                       <item>
-                        <property name="text">
-                         <string>Laje em cruz</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>Paralelo ao menor vão</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>Perpendicular ao menor vão</string>
-                        </property>
-                       </item>
-                      </widget>
-                     </item>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_6">
-                       <property name="text">
-                        <string>Caso</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_15">
-                       <property name="text">
-                        <string>Espessura (cm)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="0">
-                      <widget class="QLabel" name="label_16">
-                       <property name="text">
-                        <string>Perímetro (cm)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="1">
-                      <widget class="QLineEdit" name="espessura_parede_le_carg_laje"/>
-                     </item>
-                     <item row="3" column="0">
-                      <widget class="QLabel" name="label_30">
-                       <property name="text">
-                        <string>Altura (cm)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="1">
-                      <widget class="QLineEdit" name="altura_parede_le_carg_laje"/>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item row="3" column="2">
-                 <widget class="QGroupBox" name="groupBox_5">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="title">
-                   <string>Acidental, Utilização e Serviço</string>
-                  </property>
-                  <layout class="QGridLayout" name="gridLayout_18">
-                   <item row="0" column="0">
-                    <layout class="QGridLayout" name="gridLayout_17">
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_17">
-                       <property name="text">
-                        <string>Carga (kN/m²)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QLineEdit" name="utiliz_le_carg_laje"/>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QGroupBox" name="groupBox_2">
-                  <property name="title">
-                   <string>Revestimento Inferior</string>
-                  </property>
-                  <layout class="QGridLayout" name="gridLayout_12">
-                   <item row="0" column="0">
-                    <layout class="QGridLayout" name="gridLayout_11">
-                     <property name="verticalSpacing">
-                      <number>20</number>
-                     </property>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_12">
-                       <property name="text">
-                        <string>Peso Específico (kN/m³)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_11">
-                       <property name="text">
-                        <string>Espessura (cm)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="1">
-                      <widget class="QLineEdit" name="peso_revest_inf_le_carg_laje"/>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QLineEdit" name="espessura_revest_inf_le_carg_laje"/>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QGroupBox" name="groupBox_3">
-                  <property name="title">
-                   <string>Contrapiso</string>
-                  </property>
-                  <layout class="QGridLayout" name="gridLayout_14">
-                   <item row="0" column="0">
-                    <layout class="QGridLayout" name="gridLayout_13">
-                     <property name="verticalSpacing">
-                      <number>20</number>
-                     </property>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_13">
-                       <property name="text">
-                        <string>Espessura (cm)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_14">
-                       <property name="text">
-                        <string>Peso Específico (kN/m³)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QLineEdit" name="espessura_contrap_le_carg_laje"/>
-                     </item>
-                     <item row="1" column="1">
-                      <widget class="QLineEdit" name="peso_contrap_le_carg_laje"/>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item row="1" column="0" colspan="2">
-                 <widget class="QGroupBox" name="groupBox">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="title">
-                   <string>Revestimento Superior</string>
-                  </property>
-                  <layout class="QGridLayout" name="gridLayout_10">
-                   <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_5">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_2" native="true">
+                 <layout class="QGridLayout" name="gridLayout_4">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_5">
+                    <property name="text">
+                     <string>Número da Laje</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="nlaje_cbox_carg_laje"/>
+                  </item>
+                  <item row="1" column="0" colspan="2">
+                   <widget class="QGroupBox" name="groupBox">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="title">
+                     <string>Revestimento Superior</string>
+                    </property>
                     <layout class="QGridLayout" name="gridLayout_9">
-                     <property name="sizeConstraint">
-                      <enum>QLayout::SetDefaultConstraint</enum>
-                     </property>
-                     <property name="verticalSpacing">
-                      <number>20</number>
-                     </property>
                      <item row="0" column="0">
                       <widget class="QLabel" name="label_8">
                        <property name="text">
@@ -427,49 +253,194 @@ p, li { white-space: pre-wrap; }
                       <widget class="QLineEdit" name="peso_revest_sup_le_carg_laje"/>
                      </item>
                     </layout>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item row="0" column="4" rowspan="4">
-                 <widget class="QTextBrowser" name="textBrowser_carg_laje">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>14</pointsize>
-                   </font>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_5">
-                  <property name="text">
-                   <string>Número da Laje</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="3">
-                 <widget class="QPushButton" name="add_btn_carg_laje">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Adicionar Para Essa Laje</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QComboBox" name="nlaje_cbox_carg_laje"/>
-                </item>
-               </layout>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QGroupBox" name="groupBox_2">
+                    <property name="title">
+                     <string>Revestimento Inferior</string>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_10">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_11">
+                       <property name="text">
+                        <string>Espessura (cm)</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QLineEdit" name="espessura_revest_inf_le_carg_laje"/>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_12">
+                       <property name="text">
+                        <string>Peso Específico (kN/m³)</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="1">
+                      <widget class="QLineEdit" name="peso_revest_inf_le_carg_laje"/>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="1" column="3">
+                   <widget class="QGroupBox" name="groupBox_3">
+                    <property name="title">
+                     <string>Contrapiso</string>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_11">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_13">
+                       <property name="text">
+                        <string>Espessura (cm)</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QLineEdit" name="espessura_contrap_le_carg_laje"/>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_14">
+                       <property name="text">
+                        <string>Peso Específico (kN/m³)</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="1">
+                      <widget class="QLineEdit" name="peso_contrap_le_carg_laje"/>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="2" column="0" colspan="2">
+                   <widget class="QGroupBox" name="groupBox_4">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="title">
+                     <string>Parede</string>
+                    </property>
+                    <property name="checkable">
+                     <bool>false</bool>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_13">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_6">
+                       <property name="text">
+                        <string>Caso</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QComboBox" name="caso_parede_cbox_carg_laje">
+                       <item>
+                        <property name="text">
+                         <string>Laje em cruz</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Paralelo ao menor vão</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Perpendicular ao menor vão</string>
+                        </property>
+                       </item>
+                      </widget>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_15">
+                       <property name="text">
+                        <string>Espessura (cm)</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="1">
+                      <widget class="QLineEdit" name="espessura_parede_le_carg_laje"/>
+                     </item>
+                     <item row="2" column="0">
+                      <widget class="QLabel" name="label_16">
+                       <property name="text">
+                        <string>Perímetro (cm)</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="1">
+                      <widget class="QLineEdit" name="perimetro_parede_le_carg_laje"/>
+                     </item>
+                     <item row="3" column="0">
+                      <widget class="QLabel" name="label_30">
+                       <property name="text">
+                        <string>Altura (cm)</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="1">
+                      <widget class="QLineEdit" name="altura_parede_le_carg_laje"/>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QGroupBox" name="groupBox_5">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="title">
+                     <string>Acidental, Utilização e Serviço</string>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_12">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_17">
+                       <property name="text">
+                        <string>Carga (kN/m²)</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QLineEdit" name="utiliz_le_carg_laje"/>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="2" column="3">
+                   <widget class="QPushButton" name="add_btn_carg_laje">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Adicionar Para Essa Laje</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_carg_laje">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
+                </widget>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -477,110 +448,115 @@ p, li { white-space: pre-wrap; }
              <attribute name="title">
               <string>Reações</string>
              </attribute>
-             <layout class="QGridLayout" name="gridLayout_3">
+             <layout class="QGridLayout" name="gridLayout_14">
               <item row="0" column="0">
-               <layout class="QGridLayout" name="gridLayout_21">
-                <item row="4" column="0">
-                 <widget class="QLabel" name="label_32">
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;ν&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;y&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QLabel" name="label_31">
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;ν'&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;y&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_33">
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;ν'&lt;/span&gt;&lt;span style=&quot; font-size:11pt; vertical-align:sub;&quot;&gt;x&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QComboBox" name="nlaje_cbox_reac_laje"/>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_35">
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;λ&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_36">
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;ν&lt;/span&gt;&lt;span style=&quot; font-size:11pt; vertical-align:sub;&quot;&gt;x&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_34">
-                  <property name="text">
-                   <string>Número da Laje</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QLineEdit" name="vx_le_reac_laje"/>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QLineEdit" name="lambda_le_reac_laje">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="readOnly">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QLineEdit" name="v_x_le_reac_laje"/>
-                </item>
-                <item row="5" column="1">
-                 <widget class="QLineEdit" name="v_y_le_reac_laje"/>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QLineEdit" name="vy_le_reac_laje"/>
-                </item>
-                <item row="6" column="0" colspan="2">
-                 <widget class="QPushButton" name="add_btn_reac_laje">
-                  <property name="text">
-                   <string>Confirmar Reações</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="0" column="1">
-               <widget class="QTextBrowser" name="textBrowser_reac_laje">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                 </font>
+               <widget class="QSplitter" name="splitter_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
                 </property>
+                <widget class="QWidget" name="widget_3" native="true">
+                 <layout class="QGridLayout" name="gridLayout_3">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_34">
+                    <property name="text">
+                     <string>Número da Laje</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="nlaje_cbox_reac_laje"/>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_35">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;λ&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="lambda_le_reac_laje">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_36">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;ν&lt;/span&gt;&lt;span style=&quot; font-size:11pt; vertical-align:sub;&quot;&gt;x&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="vx_le_reac_laje"/>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_33">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;ν'&lt;/span&gt;&lt;span style=&quot; font-size:11pt; vertical-align:sub;&quot;&gt;x&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="v_x_le_reac_laje"/>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_32">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;ν&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;y&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QLineEdit" name="vy_le_reac_laje"/>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_31">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;ν'&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;y&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QLineEdit" name="v_y_le_reac_laje"/>
+                  </item>
+                  <item row="6" column="0" colspan="2">
+                   <widget class="QPushButton" name="add_btn_reac_laje">
+                    <property name="text">
+                     <string>Confirmar Reações</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_reac_laje">
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
+                </widget>
                </widget>
               </item>
              </layout>
@@ -589,108 +565,113 @@ p, li { white-space: pre-wrap; }
              <attribute name="title">
               <string>Momentos</string>
              </attribute>
-             <layout class="QGridLayout" name="gridLayout_20">
-              <item row="0" column="1">
-               <widget class="QTextBrowser" name="textBrowser_momentos_laje">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                 </font>
-                </property>
-               </widget>
-              </item>
+             <layout class="QGridLayout" name="gridLayout_16">
               <item row="0" column="0">
-               <layout class="QGridLayout" name="gridLayout_19">
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_23">
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;μ'&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;x&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QComboBox" name="nlaje_cbox_momento_laje"/>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="label_24">
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;μ&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;y&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QLabel" name="label_25">
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;μ'&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;y&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_18">
-                  <property name="text">
-                   <string>Número da Laje</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_19">
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;λ&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_21">
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;μ&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;x&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QLineEdit" name="lambda_le_momento_laje">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="readOnly">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QLineEdit" name="mx_le_momento_laje"/>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QLineEdit" name="nx_le_momento_laje"/>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QLineEdit" name="my_le_momento_laje"/>
-                </item>
-                <item row="6" column="0" colspan="2">
-                 <widget class="QPushButton" name="add_btn_momento_laje">
-                  <property name="text">
-                   <string>Confirmar Momentos</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="1">
-                 <widget class="QLineEdit" name="ny_le_momento_laje"/>
-                </item>
-               </layout>
+               <widget class="QSplitter" name="splitter_4">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_4" native="true">
+                 <layout class="QGridLayout" name="gridLayout_15">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_18">
+                    <property name="text">
+                     <string>Número da Laje</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="nlaje_cbox_momento_laje"/>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_19">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;λ&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="lambda_le_momento_laje">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_21">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;μ&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;x&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="mx_le_momento_laje"/>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_23">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;μ'&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;x&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="nx_le_momento_laje"/>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_24">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;μ&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;y&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QLineEdit" name="my_le_momento_laje"/>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_25">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;μ'&lt;/span&gt;&lt;span style=&quot; font-size:12pt; vertical-align:sub;&quot;&gt;y&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QLineEdit" name="ny_le_momento_laje"/>
+                  </item>
+                  <item row="6" column="0" colspan="2">
+                   <widget class="QPushButton" name="add_btn_momento_laje">
+                    <property name="text">
+                     <string>Confirmar Momentos</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_momentos_laje">
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
+                </widget>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -698,12 +679,18 @@ p, li { white-space: pre-wrap; }
              <attribute name="title">
               <string>Compatibilização</string>
              </attribute>
-             <layout class="QHBoxLayout" name="horizontalLayout_8">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_7">
-                <item>
-                 <layout class="QGridLayout" name="gridLayout_22">
-                  <item row="1" column="0" colspan="2">
+             <layout class="QGridLayout" name="gridLayout_18">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="childrenCollapsible">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="widget_5" native="true">
+                 <layout class="QGridLayout" name="gridLayout_17">
+                  <item row="0" column="0" colspan="2">
                    <widget class="QTableWidget" name="compat_table_compat_laje">
                     <property name="showGrid">
                      <bool>true</bool>
@@ -733,45 +720,43 @@ p, li { white-space: pre-wrap; }
                     </column>
                    </widget>
                   </item>
-                  <item row="4" column="0" colspan="2">
-                   <widget class="QPushButton" name="add_compt_btn_compat_laje">
-                    <property name="text">
-                     <string>Compatibilizar Momentos</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
+                  <item row="1" column="0">
                    <widget class="QPushButton" name="add_linha_btn_compat_laje">
                     <property name="text">
                      <string>Adicionar Linha</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="1">
+                  <item row="1" column="1">
                    <widget class="QPushButton" name="remov_linha_btn_compat_laje">
                     <property name="text">
                      <string>Remover Linha</string>
                     </property>
                    </widget>
                   </item>
+                  <item row="2" column="0" colspan="2">
+                   <widget class="QPushButton" name="add_compt_btn_compat_laje">
+                    <property name="text">
+                     <string>Compatibilizar Momentos</string>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
-                </item>
-                <item>
-                 <widget class="QTextBrowser" name="textBrowser_compat_laje">
-                  <property name="maximumSize">
-                   <size>
-                    <width>700</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>14</pointsize>
-                   </font>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_compat_laje">
+                 <property name="maximumSize">
+                  <size>
+                   <width>700</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
+                </widget>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -779,18 +764,51 @@ p, li { white-space: pre-wrap; }
              <attribute name="title">
               <string>Dimensionamento</string>
              </attribute>
-             <layout class="QHBoxLayout" name="horizontalLayout_10">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_9">
-                <item>
-                 <layout class="QGridLayout" name="gridLayout_24">
+             <layout class="QGridLayout" name="gridLayout_20">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_6" native="true">
+                 <layout class="QGridLayout" name="gridLayout_19">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_26">
+                    <property name="text">
+                     <string>Número da Laje</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="0" column="1">
                    <widget class="QComboBox" name="nlaje_cbox_dim_laje"/>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QComboBox" name="sec_cbox_dim_laje"/>
                   </item>
                   <item row="2" column="0">
                    <widget class="QLabel" name="label_28">
                     <property name="text">
                      <string>Diâmetro (mm)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="diametro_le_dim_laje"/>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_29">
+                    <property name="text">
+                     <string>Espaçamento (cm)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="espac_le_dim_laje"/>
+                  </item>
+                  <item row="4" column="0" colspan="2">
+                   <widget class="QPushButton" name="add_btn_dim_laje">
+                    <property name="text">
+                     <string>Redimensionar</string>
                     </property>
                    </widget>
                   </item>
@@ -801,48 +819,16 @@ p, li { white-space: pre-wrap; }
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="1">
-                   <widget class="QLineEdit" name="diametro_le_dim_laje"/>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QLineEdit" name="espac_le_dim_laje"/>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_29">
-                    <property name="text">
-                     <string>Espaçamento (cm)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QComboBox" name="sec_cbox_dim_laje"/>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_26">
-                    <property name="text">
-                     <string>Número da Laje</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="0" colspan="2">
-                   <widget class="QPushButton" name="add_btn_dim_laje">
-                    <property name="text">
-                     <string>Redimensionar</string>
-                    </property>
-                   </widget>
-                  </item>
                  </layout>
-                </item>
-                <item>
-                 <widget class="QTextBrowser" name="textBrowser_dim_laje">
-                  <property name="font">
-                   <font>
-                    <pointsize>14</pointsize>
-                   </font>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_dim_laje">
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
+                </widget>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -854,6 +840,308 @@ p, li { white-space: pre-wrap; }
          <attribute name="title">
           <string>Vigas</string>
          </attribute>
+         <layout class="QGridLayout" name="gridLayout_8">
+          <item row="0" column="0">
+           <widget class="QTabWidget" name="tabWidget_Viga">
+            <property name="currentIndex">
+             <number>2</number>
+            </property>
+            <widget class="QWidget" name="tab_9">
+             <attribute name="title">
+              <string>Caracterização</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_22">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_7" native="true">
+                 <layout class="QGridLayout" name="gridLayout_21">
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_48">
+                    <property name="text">
+                     <string>Nós (tuple - m)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_7">
+                    <property name="text">
+                     <string>Número da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_10">
+                    <property name="text">
+                     <string>Comprimento da Viga (m)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="l_le_carac_viga"/>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="nviga_cbox_carac_viga">
+                    <item>
+                     <property name="text">
+                      <string>1</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="h_le_carac_viga"/>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="bw_le_carac_viga"/>
+                  </item>
+                  <item row="6" column="0" colspan="2">
+                   <widget class="QPushButton" name="add_btn_carac_viga">
+                    <property name="text">
+                     <string>Adicionar Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_20">
+                    <property name="text">
+                     <string>Altura da Viga (cm)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_37">
+                    <property name="text">
+                     <string>Largura da Viga (cm)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="0" colspan="2">
+                   <widget class="QPushButton" name="remov_btn_carac_viga">
+                    <property name="text">
+                     <string>Remover Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QLineEdit" name="nos_le_carac_viga"/>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_carc_viga"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_13">
+             <attribute name="title">
+              <string>Diagramas de Momento</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_25">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_8">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_9" native="true">
+                 <layout class="QGridLayout" name="gridLayout_24">
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="import_le_momentos_viga"/>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="nviga_cbox_momentos_viga"/>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QPushButton" name="import_btn_momentos_viga">
+                    <property name="text">
+                     <string>Arquivo FTOOL</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_38">
+                    <property name="text">
+                     <string>Número da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_39">
+                    <property name="text">
+                     <string>Plotar</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QComboBox" name="plt_opt_cbox_momentos_viga">
+                    <item>
+                     <property name="text">
+                      <string>Momento</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Decalagem</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Ambos</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QCheckBox" name="reg_chkbox_momentos_viga">
+                    <property name="text">
+                     <string>Fazer regressão Linear</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0" colspan="2">
+                   <widget class="QPushButton" name="add_btn_momentos_viga">
+                    <property name="text">
+                     <string>Adicionar Momentos</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="widget_momentos_vigas" native="true"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_14">
+             <attribute name="title">
+              <string>Dimensionamento à Flexão</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_27">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_9">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_10" native="true">
+                 <layout class="QGridLayout" name="gridLayout_26">
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="nviga_cbox_dim_flex_viga"/>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_40">
+                    <property name="text">
+                     <string>Número da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_41">
+                    <property name="text">
+                     <string>Seção da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_42">
+                    <property name="text">
+                     <string>Combinação Escolhida</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0" colspan="2">
+                   <widget class="QPushButton" name="verificar_btn_dim_flex_viga">
+                    <property name="text">
+                     <string>Verificar ELS</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QComboBox" name="sec_cbox_dim_flex_viga"/>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QComboBox" name="comb_cbox_dim_flex_viga"/>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_dim_flex_viga"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_10">
+             <attribute name="title">
+              <string>Dimensionamento ao Cisalhamento</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_29">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_10">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_11" native="true">
+                 <layout class="QGridLayout" name="gridLayout_28">
+                  <item row="4" column="0" colspan="2">
+                   <widget class="QPushButton" name="pushButton_7">
+                    <property name="text">
+                     <string>Redimensionar</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_45">
+                    <property name="text">
+                     <string>Comprimento da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="comboBox_5"/>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_44">
+                    <property name="text">
+                     <string>Número da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="lineEdit_9"/>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="lineEdit_8"/>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_47">
+                    <property name="text">
+                     <string>Largura da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_46">
+                    <property name="text">
+                     <string>Altura da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="lineEdit_10"/>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_3"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
         </widget>
         <widget class="QWidget" name="tab_3">
          <attribute name="title">
@@ -871,7 +1159,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>811</width>
+     <width>825</width>
      <height>21</height>
     </rect>
    </property>
@@ -1009,7 +1297,6 @@ p, li { white-space: pre-wrap; }
  </widget>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>tabWidget_laje</tabstop>
   <tabstop>nlaje_cbox_carac_laje</tabstop>
   <tabstop>lx_le_carac_laje</tabstop>
   <tabstop>ly_le_carac_laje</tabstop>

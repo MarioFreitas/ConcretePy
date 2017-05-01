@@ -1,3 +1,3 @@
 ECHO Starting
-pyuic4 mainWindowGUI.ui -o mainWindowGUI.py
+pyuic5 mainWindowGUI.ui -o mainWindowGUI.py
 ECHO Complete

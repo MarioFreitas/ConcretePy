@@ -1,8 +1,8 @@
-from ConcretePy.Concrete.configurações import Configurações
+from ConcretePy.Concrete.configuracoes import Configuracoes
 
 
 class InputData:
-    def __init__(self, lajes={}, vigas={}, pilares={}, config=Configurações()):
+    def __init__(self, lajes={}, vigas={}, pilares={}, config=Configuracoes()):
         self.lajes = lajes
         self.vigas = vigas
         self.pilares = pilares

@@ -1,5 +1,6 @@
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 import sys
 import pickle
 from ConcretePy.gui.mainWindowGUI import Ui_MainWindow
@@ -7,6 +8,7 @@ from ConcretePy.gui.lib import *
 from ConcretePy.Concrete.inputData import InputData
 from ConcretePy.Concrete.outputData import OutputData
 from ConcretePy.Concrete.laje import Laje
+from ConcretePy.Concrete.viga import Viga
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -23,36 +25,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.file = None
         self.fileName = None
 
-        # Ações
-        self.actionNovo.triggered.connect(self.new_file)
-        self.actionAbrir.triggered.connect(self.open_file)
-        self.actionSalvar.triggered.connect(self.save_file)
-        self.actionSalvar_Como.triggered.connect(self.save_file_as)
-        self.actionSair.triggered.connect(sys.exit)
-        self.actionDevelopment_Tool.triggered.connect(self.dev_tool)
-        self.actionDimensionar_Lajes.triggered.connect(self.dimensionar_todas_lajes)
+        # Ajustes da GUI e Conexões
+        self.init_menus()
+        self.init_lajes()
+        self.init_vigas()
+        self.init_pilares()
 
-        # Botões
-        self.add_btn_carac_laje.clicked.connect(self.add_laje)
-        self.remov_btn_carac_laje.clicked.connect(self.remove_laje)
-        self.add_btn_carg_laje.clicked.connect(self.add_carga_laje)
-        self.add_btn_reac_laje.clicked.connect(self.add_reac_laje)
-        self.add_btn_momento_laje.clicked.connect(self.add_momento_laje)
-        self.add_linha_btn_compat_laje.clicked.connect(self.add_linha_compat_laje)
-        self.remov_linha_btn_compat_laje.clicked.connect(self.remov_linha_compat_laje)
-        self.add_compt_btn_compat_laje.clicked.connect(self.compat_momentos_laje)
-        self.add_btn_dim_laje.clicked.connect(self.dimensionar_elemento_laje)
-
-        # ComboBox Index Change
-        self.nlaje_cbox_carac_laje.currentIndexChanged.connect(self.change_carac_cbox_laje)
-        self.nlaje_cbox_carg_laje.currentIndexChanged.connect(self.change_carga_cbox_laje)
-        self.nlaje_cbox_reac_laje.currentIndexChanged.connect(self.change_reac_cbox_laje)
-        self.nlaje_cbox_momento_laje.currentIndexChanged.connect(self.change_momento_cbox_laje)
-        self.nlaje_cbox_dim_laje.currentIndexChanged.connect(self.change_dim_cbox_laje)
+        self.show()
 
         # DEBUG OPTIONS
-        DEBUG = False
+        DEBUG = True
         if DEBUG:
+            ### Lajes ###
             # Caracterização
             self.lx_le_carac_laje.setText('400')
             self.ly_le_carac_laje.setText('800')
@@ -138,8 +122,76 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Dimensionamento
             self.actionDimensionar_Lajes.trigger()
 
-        self.show()
+            ### Vigas ###
+            # Carcterização
+            self.l_le_carac_viga.setText('12')
+            self.h_le_carac_viga.setText('60')
+            self.bw_le_carac_viga.setText('15')
+            self.nos_le_carac_viga.setText('0, 6, 12')
+            self.add_btn_carac_viga.click()
 
+            # Momentos
+            self.import_le_momentos_viga.setText('C:/Python36/Lib/site-packages/ConcretePy/save/momentos/teste3-m.txt')
+            self.add_btn_momentos_viga.click()
+
+            # Dimensionar
+            self.actionDimensionar_Vigas.trigger()
+
+    def init_menus(self):
+        self.actionNovo.triggered.connect(self.new_file)
+        self.actionAbrir.triggered.connect(self.open_file)
+        self.actionSalvar.triggered.connect(self.save_file)
+        self.actionSalvar_Como.triggered.connect(self.save_file_as)
+        self.actionSair.triggered.connect(sys.exit)
+        self.actionDevelopment_Tool.triggered.connect(self.dev_tool)
+
+    def init_lajes(self):
+        # Ações
+        self.actionDimensionar_Lajes.triggered.connect(self.dimensionar_todas_lajes)
+
+        # Botões
+        self.add_btn_carac_laje.clicked.connect(self.add_laje)
+        self.remov_btn_carac_laje.clicked.connect(self.remove_laje)
+        self.add_btn_carg_laje.clicked.connect(self.add_carga_laje)
+        self.add_btn_reac_laje.clicked.connect(self.add_reac_laje)
+        self.add_btn_momento_laje.clicked.connect(self.add_momento_laje)
+        self.add_linha_btn_compat_laje.clicked.connect(self.add_linha_compat_laje)
+        self.remov_linha_btn_compat_laje.clicked.connect(self.remov_linha_compat_laje)
+        self.add_compt_btn_compat_laje.clicked.connect(self.compat_momentos_laje)
+        self.add_btn_dim_laje.clicked.connect(self.dimensionar_elemento_laje)
+
+        # ComboBox Index Change
+        self.nlaje_cbox_carac_laje.currentIndexChanged.connect(self.change_carac_cbox_laje)
+        self.nlaje_cbox_carg_laje.currentIndexChanged.connect(self.change_carga_cbox_laje)
+        self.nlaje_cbox_reac_laje.currentIndexChanged.connect(self.change_reac_cbox_laje)
+        self.nlaje_cbox_momento_laje.currentIndexChanged.connect(self.change_momento_cbox_laje)
+        self.nlaje_cbox_dim_laje.currentIndexChanged.connect(self.change_dim_cbox_laje)
+
+    def init_vigas(self):
+        # Widget Momentos Plt
+        self.widget_momentos_vigas.mpl = MplWidget(self)
+        self.widget_momentos_vigas.grid = QGridLayout()
+        self.widget_momentos_vigas.setLayout(self.widget_momentos_vigas.grid)
+        self.widget_momentos_vigas.grid.addWidget(self.widget_momentos_vigas.mpl, 1, 1)
+
+        # Ações
+        self.actionDimensionar_Vigas.triggered.connect(self.dimensionar_todas_vigas)
+
+        # Botões
+        self.add_btn_carac_viga.clicked.connect(self.add_viga)
+        self.remov_btn_carac_viga.clicked.connect(self.rem_viga)
+        self.import_btn_momentos_viga.clicked.connect(self.import_momentos_vigas)
+        self.add_btn_momentos_viga.clicked.connect(self.add_momentos_vigas)
+
+        # ComboBox Index Change
+        self.nviga_cbox_carac_viga.currentIndexChanged.connect(self.change_carac_cbox_viga)
+        self.nviga_cbox_dim_flex_viga.currentIndexChanged.connect(self.change_nviga_cbox_dim_flex_viga)
+        self.sec_cbox_dim_flex_viga.currentIndexChanged.connect(self.change_sec_cbox_dim_flex_viga)
+
+    def init_pilares(self):
+        pass
+
+    # Menu methods
     def save_file(self):
         if self.fileName is None:
             self.save_file_as()
@@ -157,7 +209,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.file.close()
 
     def save_file_as(self):
-        self.fileName = QFileDialog.getSaveFileName(self, 'Salvar como', './save', filter="ConctrePy File(*.cpfl)")
+        self.fileName = QFileDialog.getSaveFileName(self, 'Salvar como', './save', filter="ConctrePy File(*.cpfl)")[0]
         if self.fileName == '':
             self.fileName = None
             return
@@ -168,7 +220,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if fileName is not None:
             self.fileName = fileName
         else:
-            fileName = QFileDialog.getOpenFileName(self, 'Abrir arquivo', './save', filter="ConctrePy File(*.cpfl)")
+            fileName = QFileDialog.getOpenFileName(self, 'Abrir arquivo', './save', filter="ConctrePy File(*.cpfl)")[0]
             if fileName == '':
                 return None
             self.new_file()
@@ -250,21 +302,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def dev_tool_exec(self):
         exec(get_text(self.devDialog.textEdit))
 
+    # Error pop-ups
     def check_error01(self, tp):
         for i in tp:
             try:
                 float(i)
             except ValueError:
-                icon = QStyle.SP_MessageBoxWarning
-                self.error01 = QMessageBox()
-                self.error01.setText('Preencha os campos de texto com números reais')
-                self.error01.setWindowTitle('Erro 01')
-                self.error01.setWindowIcon(self.error01.style().standardIcon(icon))
-                self.error01.setIcon(QMessageBox.Warning)
-                self.error01.show()
+                error_title = "Error 01"
+                error_msg = "Preencha os campos de texto com números reais."
+                QMessageBox.warning(self, error_title, error_msg, QMessageBox.Ok)
                 return False
         return True
 
+    # Laje methods
     def add_laje(self):
         numero = get_text(self.nlaje_cbox_carac_laje)
         lx = get_text(self.lx_le_carac_laje)
@@ -387,7 +437,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Peso próprio: {:.2f} kN/m²
         Carga permanente: {:.2f} kN/m²
         Carga de utilização: {:.2f} kN/m²
-        Carga total: {:.2f} kN/m²\n\n""".format(laje.numero, carga.peso_próprio / 1e3,
+        Carga total: {:.2f} kN/m²\n\n""".format(laje.numero, carga.peso_proprio / 1e3,
                                                 carga.carga_permanente / 1e3,
                                                 carga.carga_utilizacao / 1e3, carga.carga_total / 1e3)
 
@@ -786,6 +836,155 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         try:
             self.lx_le_carac_laje.setText(str(self.inputData.lajes[n].lx * 100))
         except KeyError:
+            pass
+
+    # Viga Methods
+    def add_viga(self):
+        n = get_text(self.nviga_cbox_carac_viga)
+        l = get_text(self.l_le_carac_viga)
+        h = get_text(self.h_le_carac_viga)
+        bw = get_text(self.bw_le_carac_viga)
+        nos = get_text(self.nos_le_carac_viga)
+
+        if not self.check_error01((l, h, bw)):
+            return
+
+        try:
+            nos = list(eval(nos))
+            for i in range(len(nos)):
+                nos[i] = float(nos[i])
+        except:
+            error_title = "Error 02"
+            error_msg = "Elementos do tuple apoio devem ser números reais"
+            QMessageBox.warning(self, error_title, error_msg, QMessageBox.Ok)
+            return
+
+        n = int(n)
+        l = float(l)
+        h = float(h) / 100
+        bw = float(bw) / 100
+
+        try:
+            assert round(l, 2) == round(nos[-1], 2)
+        except AssertionError:
+            error_title = "Error 03"
+            error_msg = "Último elemento da tuple nós deve ser igual ao comprimento da viga"
+            QMessageBox.warning(self, error_title, error_msg, QMessageBox.Ok)
+            return
+
+        self.inputData.vigas.update({n: Viga(n, l, h, bw, nos, self.inputData.config)})
+
+        if self.nviga_cbox_carac_viga.currentIndex() + 1 == self.nviga_cbox_carac_viga.count():
+            self.nviga_cbox_carac_viga.addItem(str(n + 1))
+            self.nviga_cbox_momentos_viga.addItem(str(n))
+            self.nviga_cbox_dim_flex_viga.addItem(str(n))
+            self.nviga_cbox_carac_viga.setCurrentIndex(self.nviga_cbox_carac_viga.currentIndex() + 1)
+        else:
+            self.nviga_cbox_carac_viga.setCurrentIndex(self.nviga_cbox_carac_viga.currentIndex() + 1)
+
+        self.update_carac_viga_text()
+
+    def rem_viga(self):
+        if self.nviga_cbox_carac_viga.currentIndex() + 1 == self.nviga_cbox_carac_viga.count() - 1:
+            numero = int(get_text(self.nviga_cbox_carac_viga))
+            self.inputData.vigas.pop(numero)
+            self.nviga_cbox_carac_viga.removeItem(numero)
+            self.nviga_cbox_momentos_viga.removeItem(numero - 1)
+            self.nviga_cbox_dim_flex_viga.removeItem(numero - 1)
+            self.update_carac_viga_text()
+            if self.nviga_cbox_carac_viga.currentIndex() != 0:
+                self.nviga_cbox_carac_viga.setCurrentIndex(self.nviga_cbox_carac_viga.currentIndex() - 1)
+        else:
+            error_title = "Error 05"
+            error_msg = "Remova primeiro a última viga adicionada"
+            QMessageBox.warning(self, error_title, error_msg, QMessageBox.Ok)
+
+    def update_carac_viga_text(self):
+        s = ''
+
+        for i in range(1, len(self.inputData.vigas) + 1):
+            viga = self.inputData.vigas[i]
+            s += """Viga {}
+    l = {} m
+    h = {} cm
+    bw = {} cm
+    Nós: {}
+\n""".format(viga.numero, viga.l, viga.h * 100, viga.bw * 100, viga.nos)
+
+        self.textBrowser_carc_viga.setText(s)
+
+    def import_momentos_vigas(self):
+        n = int(get_text(self.nviga_cbox_momentos_viga))
+        fileName = QFileDialog.getOpenFileName(self, 'Importar Momento', './save/momentos',
+                                               filter="Arquivo de Texto(*.txt)")[0]
+        self.import_le_momentos_viga.setText(fileName)
+        self.add_momentos_vigas()
+
+    def add_momentos_vigas(self):
+        n = int(get_text(self.nviga_cbox_momentos_viga))
+        fileName = get_text(self.import_le_momentos_viga)
+        reg = self.reg_chkbox_momentos_viga.isChecked()
+
+        flag = self.inputData.vigas[n].ler_csv(fileName, reg)
+        if flag:
+            error_title = "Error 04"
+            error_msg = "Apoios incompatíveis com diagrama de momento fornecido"
+            QMessageBox.warning(self, error_title, error_msg, QMessageBox.Ok)
+            return
+
+        x = self.inputData.vigas[n].x
+        m = self.inputData.vigas[n].m
+        self.widget_momentos_vigas.mpl.mplCanvas.plot_momento(x, m)
+
+    def dimensionar_todas_vigas(self):
+        for viga in self.inputData.vigas.keys():
+            self.inputData.vigas[viga].procurar_momentos()
+            for momento in self.inputData.vigas[viga].momentos.keys():
+                self.inputData.vigas[viga].momentos[momento].dimensionar_flexao()
+
+        self.change_nviga_cbox_dim_flex_viga()
+        self.change_sec_cbox_dim_flex_viga()
+
+    def update_dim_flex_text(self):
+        s = ''
+        viga = int(get_text(self.nviga_cbox_dim_flex_viga))
+        sec = int(get_text(self.sec_cbox_dim_flex_viga))
+        for i in range(len(self.inputData.vigas[viga].momentos[sec].possibilidades)):
+            s += f'Possibilidade {i+1}:\n'
+            s += str(self.inputData.vigas[viga].momentos[sec].possibilidades[i])
+            s += '\n\n'
+        self.textBrowser_dim_flex_viga.setText(s)
+
+    def change_nviga_cbox_dim_flex_viga(self):
+        viga = int(get_text(self.nviga_cbox_dim_flex_viga))
+        self.sec_cbox_dim_flex_viga.clear()
+        for i in range(len(self.inputData.vigas[viga].momentos)):
+            self.sec_cbox_dim_flex_viga.addItem(f'{i+1}')
+        self.sec_cbox_dim_flex_viga.setCurrentIndex(0)
+
+    def change_sec_cbox_dim_flex_viga(self):
+        viga = int(get_text(self.nviga_cbox_dim_flex_viga))
+        sec = int(get_text(self.sec_cbox_dim_flex_viga))
+        self.comb_cbox_dim_flex_viga.clear()
+        for i in range(len(self.inputData.vigas[viga].momentos[sec].possibilidades)):
+            self.comb_cbox_dim_flex_viga.addItem(f'{i+1}')
+        self.comb_cbox_dim_flex_viga.setCurrentIndex(0)
+
+        self.update_dim_flex_text()
+
+    def change_carac_cbox_viga(self):
+        try:
+            n = int(get_text(self.nviga_cbox_carac_viga))
+            self.l_le_carac_viga.setText(str(self.inputData.vigas[n].l))
+            self.h_le_carac_viga.setText(str(self.inputData.vigas[n].h * 100))
+            self.bw_le_carac_viga.setText(str(self.inputData.vigas[n].bw * 100))
+            text = '{}'.format(self.inputData.vigas[n].nos)
+            text = text.strip('[')
+            text = text.strip(']')
+            self.nos_le_carac_viga.setText(text)
+        except KeyError:
+            pass
+        except ValueError:
             pass
 
 
