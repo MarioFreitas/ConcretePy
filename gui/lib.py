@@ -82,3 +82,17 @@ class MplCanvas(FigureCanvas):
         self.axes.set_ylabel('Momento Fletor (kN.m)')
         self.fig.tight_layout()
         self.draw()
+
+    def plot_cortante(self, x, v):
+        self.axes.cla()
+
+        cycol = cycle('brgcmk')
+        self.axes.plot(x, v/1e3, c=next(cycol), label='Cortante')
+
+        self.axes.legend(fontsize=11)
+        self.axes.set_title('Diagrama de Cortante')
+
+        self.axes.set_xlabel('x (m)')
+        self.axes.set_ylabel('Cortante (kN)')
+        self.fig.tight_layout()
+        self.draw()

@@ -22,7 +22,7 @@ packages = ['matplotlib', 'atexit', 'PyQt5.QtCore', 'tkinter', 'numpy']
 includes = []
 include_files = [os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tk86t.dll'),
                  os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tcl86t.dll'),
-                 'icon_64.ico',
+                 './img/icon_64.ico',
                  'C:/Python36/Lib/site-packages/ConcretePy/save',
                  'C:/Python36/Lib/site-packages/ConcretePy/img']
 excludes = ['zmq']

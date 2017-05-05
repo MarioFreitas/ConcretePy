@@ -26,7 +26,7 @@
          <bool>false</bool>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -844,7 +844,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QTabWidget" name="tabWidget_Viga">
             <property name="currentIndex">
-             <number>2</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_9">
              <attribute name="title">
@@ -967,43 +967,7 @@ p, li { white-space: pre-wrap; }
                     </property>
                    </widget>
                   </item>
-                  <item row="5" column="0">
-                   <widget class="QLabel" name="label_39">
-                    <property name="text">
-                     <string>Plotar</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="5" column="1">
-                   <widget class="QComboBox" name="plt_opt_cbox_momentos_viga">
-                    <item>
-                     <property name="text">
-                      <string>Momento</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Decalagem</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Ambos</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QCheckBox" name="reg_chkbox_momentos_viga">
-                    <property name="text">
-                     <string>Fazer regressão Linear</string>
-                    </property>
-                    <property name="checked">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="0" colspan="2">
+                  <item row="3" column="0" colspan="2">
                    <widget class="QPushButton" name="add_btn_momentos_viga">
                     <property name="text">
                      <string>Adicionar Momentos</string>
@@ -1056,7 +1020,7 @@ p, li { white-space: pre-wrap; }
                   <item row="3" column="0" colspan="2">
                    <widget class="QPushButton" name="verificar_btn_dim_flex_viga">
                     <property name="text">
-                     <string>Verificar ELS</string>
+                     <string>Confirmar Escolha</string>
                     </property>
                    </widget>
                   </item>
@@ -1069,6 +1033,128 @@ p, li { white-space: pre-wrap; }
                  </layout>
                 </widget>
                 <widget class="QTextBrowser" name="textBrowser_dim_flex_viga"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="">
+             <attribute name="title">
+              <string>Verificação ELS</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_31">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_11">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_12" native="true">
+                 <layout class="QGridLayout" name="gridLayout_30">
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="nviga_cbox_dim_flex_viga_2"/>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_43">
+                    <property name="text">
+                     <string>Número da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_50">
+                    <property name="text">
+                     <string>Ecs</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0" colspan="2">
+                   <widget class="QPushButton" name="verificar_btn_dim_flex_viga_2">
+                    <property name="text">
+                     <string>Verificar ELS</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_49">
+                    <property name="text">
+                     <string>Seção da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QComboBox" name="sec_cbox_dim_flex_viga_2"/>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="lineEdit"/>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="lineEdit_2"/>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_51">
+                    <property name="text">
+                     <string>Ieq</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_52">
+                    <property name="text">
+                     <string>Flecha Máxima</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QLineEdit" name="lineEdit_3"/>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_dim_flex_viga_2"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_12">
+             <attribute name="title">
+              <string>Diagrama de Cortante</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_33">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_12">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_13" native="true">
+                 <layout class="QGridLayout" name="gridLayout_32">
+                  <item row="1" column="0">
+                   <widget class="QPushButton" name="import_btn_cortantes_viga">
+                    <property name="text">
+                     <string>Arquivo FTOOL</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="import_le_cortantes_viga"/>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="nviga_cbox_cortantes_viga"/>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_53">
+                    <property name="text">
+                     <string>Número da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0" colspan="2">
+                   <widget class="QPushButton" name="add_btn_cortantes_viga">
+                    <property name="text">
+                     <string>Adicionar Cortantes</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="widget_cortantes_vigas" native="true"/>
                </widget>
               </item>
              </layout>
