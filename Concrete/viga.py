@@ -185,7 +185,7 @@ class Momento:
         self.h = viga.h
         self.bw = viga.bw
         self.config = viga.config
-        self.diametroEstribo = 0.005
+        self.diametroEstribo = 0.0063
 
         self.Msd = self.config.gama_f * self.Msk
 
@@ -231,6 +231,13 @@ class Momento:
                 numero_barras = np.ceil(As_calc / Aphi)
                 As_adotada = numero_barras * Aphi
 
+                if numero_barras <= 1:
+                    num = 2
+                else:
+                    num = numero_barras
+
+                numero_barras = num
+
                 if numero_barras - 2 * (linhas - 1) < 2:
                     break
 
@@ -242,7 +249,7 @@ class Momento:
                     a = 0
                 elif linhas == 2:
                     a = (sv_min + diametro) * ((numero_barras - 2) / numero_barras)
-                elif linhas == 3:
+                else:
                     a = ((numero_barras - 4) * 2 * (sv_min + diametro) + 2 * (sv_min + diametro)) / numero_barras
 
                 ver = self.verificar_espacamento_horizontal(sh_min, sh)
@@ -272,8 +279,8 @@ class Momento:
     def verificar_kx(self, kx):
         fck = round(self.config.fck / 1e6, 0)
         if self.tipo == '+':
-            kxlim = kxlim2_3_dict[fck]
-            return kx < kxlim
+            # kxlim = kxlim2_3_dict[fck]
+            return kx < 0.45
         else:
             if fck <= 50:
                 return kx <= 0.45
@@ -340,20 +347,30 @@ class Cortante:
         self.v = v
         self.momentos = momentos
         self.config = viga.config
+        self.numero_viga = viga.numero
         self.bw = viga.bw
+        self.h = viga.h
 
+        self.l = self.x[-1] - self.x[0]
         self.d = None
         self.buscar_d()
-        self.Vsd = max(np.abs(self.v))
+        self.Vsd = self.config.gama_f*max(np.abs(self.v))
         self.Vrd2 = 0.27 * self.config.alfa_v2 * self.config.fcd * self.bw * self.d
         self.Vc = 0.6 * self.config.fctd * self.bw * self.d
+        self.Vsw = self.Vsd - self.Vc
 
         self.Asw_s_min = 0.2 * (self.config.fct_m / self.config.fywk) * self.bw
 
-        self.diametro = 0.005
+        self.diametro = 0.0063
         self.Asw_s = None
         self.espacamento = None
-        self.dimensionar_transversal()
+        self.s_max = None
+        self.lg = None
+        self.comprimento = None
+        self.numero_de_estribos = None
+        self.espacamento_max()
+        self.dimensionar_estribos()
+        self.comprimento_estribo()
 
     def buscar_d(self):
         n = self.numero * 2 - 1
@@ -369,13 +386,67 @@ class Cortante:
     def verificar_esmagamento_biela(self):
         return self.Vsd < self.Vrd2
 
-    def dimensionar_transversal(self):
-        Vsd_max_min = 0.9 * self.config.fywd * self.bw * self.d * self.Asw_s_min + self.Vc
+    def espacamento_max(self):
+        if self.Vsd <= 0.67*self.Vrd2:
+            self.s_max = min(0.6*self.d, 0.3)
+        else:
+            self.s_max = min(0.3 * self.d, 0.2)
+
+    def dimensionar_estribos(self):
+        Vsd_max_min = 0.9 * self.config.fywd * self.d * self.Asw_s_min + self.Vc
         if self.Vsd < Vsd_max_min:
             self.Asw_s = self.Asw_s_min
+        else:
+            self.Asw_s = (self.Vsw)/(0.9 * self.config.fywd * self.d)
 
+        self.espacamento = min((2*(0.25*self.diametro**2)/self.Asw_s*self.l), self.s_max)
+        self.numero_de_estribos = np.ceil(self.l/self.espacamento)
+        self.espacamento = self.l/self.numero_de_estribos
+
+    def comprimento_estribo(self):
+        self.lg = max(10*self.diametro, 0.07)
+        b = self.bw - 2*self.config.c_viga
+        h = self.h - 2*self.config.c_viga
+        self.comprimento = 2*(self.lg + b + h)
+
+    def __str__(self):
+        s = f'Viga: {self.numero_viga}\nSeção: {self.numero}\nDiâmetro: {self.diametro*1e3} mm\n'
+        s += f'Quantidade: {self.numero_de_estribos:.0f} estribos\nEspaçamento: {self.espacamento*100:.1f} cm\n'
+        s += f'Espaçamento Máximo: {self.s_max*100:.1f} cm\n'
+        s += f'Comprimento do Estribo: {self.comprimento} m\n'
+        s += f'Comprimento do Gancho: {self.lg} m'
+        return s
 
 if __name__ == '__main__':
+    # from matplotlib import pyplot as plt
+    #
+    # v1 = Viga(1, 12, 0.65, 0.15, (0, 5, 12))
+    # v1.ler_csv_momentos('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/Honorato-m.txt', reg_check=False)
+    # # plt.plot(v1.x_m, -v1.m/1000)
+    # # plt.show()
+    #
+    # v1.procurar_momentos()
+    #
+    # v1.momentos[1].dimensionar_flexao()
+    # v1.momentos[1].escolher_armadura(1)
+    # # print(v1.momentos[1].armadura)
+    #
+    # v1.momentos[2].dimensionar_flexao()
+    # v1.momentos[2].escolher_armadura(1)
+    # # print(v1.momentos[2].armadura)
+    #
+    # v1.momentos[3].dimensionar_flexao()
+    # v1.momentos[3].escolher_armadura(0)
+    # # print(v1.momentos[3].armadura)
+    #
+    # v1.ler_csv_cortantes('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/Honorato-v.txt', reg_check=False)
+    # v1.procurar_cortantes()
+    # print(v1.cortantes[2].d)
+    # print(v1.cortantes[2].verificar_altura_minima())
+    # print(v1.cortantes[2].verificar_esmagamento_biela())
+    # print(v1.cortantes[1])
+    # print(v1.cortantes[2])
+
     v1 = Viga(1, 12, 0.60, 0.15, (0, 6, 12))
     v1.ler_csv_momentos('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/teste3-m.txt', reg_check=True)
     v1.procurar_momentos()
@@ -391,6 +462,9 @@ if __name__ == '__main__':
     print(v1.cortantes[1].d)
     print(v1.cortantes[1].verificar_altura_minima())
     print(v1.cortantes[1].verificar_esmagamento_biela())
+    print(v1.cortantes[1])
+    print(v1.cortantes[2])
+
     # x = v1.cortantes[1].x
     # v = v1.cortantes[1].v
     # from matplotlib import pyplot as plt

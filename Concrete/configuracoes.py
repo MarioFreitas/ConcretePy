@@ -26,11 +26,11 @@ class Configuracoes:
         self.alfa_e = 1.0
 
         # Propriedades do Concreto
-        self.fck = 35e6
+        self.fck = 30e6
         self.fct_m = (0.3 * (self.fck / 1e6) ** (2 / 3)) * 1e6
         self.fctk_inf = 0.7 * self.fct_m
         self.fctk_sup = 1.3 * self.fct_m
-        self.fctd = (0.15 * (self.fck / 1e6) ** (2 / 3)) * 1e6
+        self.fctd = self.fctk_inf / self.gama_c
         self.fcd = self.fck / self.gama_c
         self.lamb = 0.8
         self.alfa_c = 0.85
