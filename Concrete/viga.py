@@ -29,6 +29,13 @@ class Viga:
         self.momentos = {}
         self.cortantes = {}
 
+        self.d_min = None
+        self.Asw_s_min = None
+        self.Vc = None
+        self.Vsd_min = None
+        self.Vsd_max = None
+        self.al = None
+
     def __repr__(self):
         s = 'Viga {}\nL = {}\nh = {}\nbw = {}'.format(self.numero, self.l, self.h, self.bw)
         return s
@@ -164,15 +171,61 @@ class Viga:
             self.v = self.v_org
 
     def procurar_cortantes(self):
-        pares_nos = list(zip(self.nos[0:-1], self.nos[1:]))
+        d_list = [i.armadura.d for i in self.momentos.values()]
+        self.d_min = min(d_list)
+        self.Asw_s_min = 0.2 * (self.config.fct_m / self.config.fywk) * self.bw
+        self.Vc = 0.6 * self.config.fctd * self.bw * self.d_min
+        self.Vsd_min = 0.9 * self.config.fywd * self.d_min * self.Asw_s_min + self.Vc
+        self.Vsd_max = self.config.gama_f * max(np.abs(self.v))
+
         x = list(self.x_v)
-        v = list(self.v)
-        for i, j in enumerate(pares_nos):
-            i0 = x.index(j[0])
-            i1 = x.index(j[1])
-            xi = x[i0 + 1: i1 + 1]
-            vi = v[i0 + 1: i1 + 1]
-            self.cortantes.update({i + 1: Cortante(i + 1, xi, vi, self.momentos, self)})
+        v = list(self.v * self.config.gama_f)
+
+        x0 = x[0]
+        v0 = v[0]
+        i0 = x.index(x0)
+        if abs(v0) <= abs(self.Vsd_min):
+            flag = True
+        else:
+            flag = False
+
+        n = 1
+        for i, j in zip(x, v):
+            if flag:
+                if abs(j) > abs(self.Vsd_min):
+                    i1 = x.index(i)
+                    xi = x[i0: i1 + 1]
+                    vi = v[i0: i1 + 1]
+                    self.cortantes.update({n: Cortante(n, xi, vi, self.momentos, self)})
+                    x0 = i
+                    v0 = j
+                    i0 = x.index(x0)
+                    n += 1
+                    flag = False
+            else:
+                if abs(j) <= abs(self.Vsd_min):
+                    i1 = x.index(i)
+                    xi = x[i0: i1 + 1]
+                    vi = v[i0: i1 + 1]
+                    self.cortantes.update({n: Cortante(n, xi, vi, self.momentos, self)})
+                    x0 = i
+                    v0 = j
+                    i0 = x.index(x0)
+                    n += 1
+                    flag = True
+        else:
+            i1 = x.index(i)
+            xi = x[i0: i1 + 1]
+            vi = v[i0: i1 + 1]
+            self.cortantes.update({n: Cortante(n, xi, vi, self.momentos, self)})
+            x0 = i
+            v0 = j
+            i0 = x.index(x0)
+            n += 1
+
+    def decalagem(self):
+        self.al = self.d_min * (self.Vsd_max / (2 * (self.Vsd_max - self.Vc)))
+        self.al = max(self.al, 0.5 * self.d_min)
 
 
 class Momento:
@@ -185,12 +238,17 @@ class Momento:
         self.h = viga.h
         self.bw = viga.bw
         self.config = viga.config
+        self.x = viga.x_m
+        self.m = viga.m
+        self.viga = viga
         self.diametroEstribo = 0.0063
 
         self.Msd = self.config.gama_f * self.Msk
 
         self.possibilidades = None
         self.armadura = None
+
+        self.limitar_diagrama_momentos()
 
     def __str__(self):
         s = f'id: {self.id}\nTipo: {self.tipo}\nModulo: {self.Msk}\nPos: {self.pos}'
@@ -259,8 +317,10 @@ class Momento:
 
                 if ver:
                     self.possibilidades.append(
-                        ArmaduraFlexao(numero_barras, diametro, linhas, As_calc, As_adotada, sh, d))
+                        ArmaduraFlexao(numero_barras, diametro, linhas, As_calc, As_adotada, sh, d, self.x, self.m,
+                                       self.tipo, self.config))
                     break
+        self.escolher_armadura(0)
 
     def verificar_espacamento_horizontal(self, s_min, sh):
         return sh > s_min
@@ -322,9 +382,37 @@ class Momento:
     def verificar_els_deformacao(self, armadura):
         Mr = 0.25 * self.bw * (self.h ** 2) * self.config.fct_m
 
+    def limitar_diagrama_momentos(self):
+        x = list(self.x)
+        m = list(self.m)
+        x_cent = self.pos
+        i = x.index(x_cent)
+        m_cent = m[i]
+
+        while True:
+            i += 1
+            mi = m[i]
+            if (mi * m_cent) <= 0:
+                i_dir = i
+                break
+
+        i = x.index(x_cent)
+
+        while True:
+            i -= 1
+            mi = m[i]
+            if (mi * m_cent) <= 0:
+                i_esq = i
+                break
+
+        self.x = x[i_esq: i_dir + 1]
+        self.m = m[i_esq: i_dir + 1]
+
+        self.m = [self.config.gama_f * abs(j) for j in self.m]
+
 
 class ArmaduraFlexao:
-    def __init__(self, numero_barras, diametro, linhas, As_calc, As_adotada, espacamento, d):
+    def __init__(self, numero_barras, diametro, linhas, As_calc, As_adotada, espacamento, d, x, m, tipo, config):
         self.numero_barras = int(numero_barras)
         self.diametro = diametro
         self.linhas = linhas
@@ -332,11 +420,96 @@ class ArmaduraFlexao:
         self.As_adotada = As_adotada
         self.espacamento = espacamento
         self.d = d
+        self.x = x
+        self.m = m
+        self.tipo = tipo
+        self.config = config
+        self.l_diag = self.x[-1] - self.x[0]
+
+        self.al = None
+        self.As_apoio_calc = None
+        self.As_apoio_adot = None
+        self.fbd = None
+        self.lb = None
+        self.lb_min = None
+        self.lb_nec = None
+        self.comprimento_l1 = None
+        self.l_diag2 = None
+        self.comprimento_l2 = None
+        self.l_diag3 = None
+        self.comprimento_l3 = None
+
+    def atribuir_al(self, al):
+        self.al = al
+
+    def calcular_ancoragem(self):
+        self.As_apoio_calc = self.As_adotada / 3
+        barras_apoio = (self.numero_barras - 2 * (self.linhas - 1)) / self.numero_barras
+        self.As_apoio_adot = self.As_adotada * barras_apoio
+
+        n1 = 2.25
+        if self.tipo == '+':
+            n2 = 1
+        else:
+            n2 = 0.7
+        n3 = min((1, (0.132 - self.diametro) * 10))
+        self.fbd = n1 * n2 * n3 * self.config.fctd
+        self.lb = max(((self.diametro / 4) * (self.config.fyd / self.fbd), 25 * self.diametro))
+        self.lb_min = max((0.3 * self.lb, 10 * self.diametro, 0.1))
+        self.lb_nec = max((self.lb * self.As_apoio_calc / self.As_apoio_adot, self.lb_min))
+        self.comprimento_l1 = self.l_diag + 2 * self.al + 2 * self.lb_nec
+
+        if self.linhas > 1:
+            i = 0
+            n = 0
+            frac_barras = (self.numero_barras - 2 * (self.linhas - 1)) / self.numero_barras
+            m_corte = frac_barras * max(self.m)
+
+            while n < 2:
+                mi = self.m[i]
+                if n == 0:
+                    if mi >= m_corte:
+                        i0 = i
+                        n += 1
+                if n == 1:
+                    if mi <= m_corte:
+                        i1 = i
+                        n += 1
+                i += 1
+
+            self.l_diag2 = self.x[i1] - self.x[i0]
+            self.comprimento_l2 = self.l_diag2 + 2 * self.al + 2 * max((self.lb, self.lb_min))
+
+        if self.linhas > 2:
+            i = 0
+            n = 0
+            frac_barras = (self.numero_barras - 2 * (self.linhas - 1) + 2) / self.numero_barras
+            m_corte = frac_barras * max(self.m)
+
+            while n < 2:
+                mi = self.m[i]
+                if n == 0:
+                    if mi >= m_corte:
+                        i0 = i
+                        n += 1
+                if n == 1:
+                    if mi <= m_corte:
+                        i1 = i
+                        n += 1
+                i += 1
+
+            self.l_diag3 = self.x[i1] - self.x[i0]
+            self.comprimento_l3 = self.l_diag3 + 2 * self.al + 2 * max((self.lb, self.lb_min))
 
     def __str__(self):
         s = f'{self.numero_barras} barras de {self.diametro*1e3} mm dispostas em {self.linhas} linhas\n'
         s += f'Área de aço calculada: {self.As_calc*1e4:.2f} cm²\nÁrea de aço adotada: {self.As_adotada*1e4:.2f} cm²\n'
-        s += f'Espaçamento: {self.espacamento*100:.2f} cm'
+        s += f'Espaçamento: {self.espacamento*100:.2f} cm\n'
+        s += f'Comprimento da primeira linha: {self.comprimento_l1} m\n'
+        if self.linhas > 1:
+            s += f'Comprimento da segunda linha: {self.comprimento_l2} m\n'
+        if self.linhas > 2:
+            s += f'Comprimento da terceira linha: {self.comprimento_l3} m\n'
         return s
 
 
@@ -350,16 +523,16 @@ class Cortante:
         self.numero_viga = viga.numero
         self.bw = viga.bw
         self.h = viga.h
+        self.Asw_s_min = viga.Asw_s_min
+        self.d_min = viga.d_min
+        self.Vc = viga.Vc
+        self.Vsd_min = viga.Vsd_min
 
         self.l = self.x[-1] - self.x[0]
-        self.d = None
-        self.buscar_d()
-        self.Vsd = self.config.gama_f*max(np.abs(self.v))
-        self.Vrd2 = 0.27 * self.config.alfa_v2 * self.config.fcd * self.bw * self.d
-        self.Vc = 0.6 * self.config.fctd * self.bw * self.d
+        # self.Vsd = self.config.gama_f*max(np.abs(self.v))
+        self.Vsd = max(np.abs(self.v))
+        self.Vrd2 = 0.27 * self.config.alfa_v2 * self.config.fcd * self.bw * self.d_min
         self.Vsw = self.Vsd - self.Vc
-
-        self.Asw_s_min = 0.2 * (self.config.fct_m / self.config.fywk) * self.bw
 
         self.diametro = 0.0063
         self.Asw_s = None
@@ -372,13 +545,9 @@ class Cortante:
         self.dimensionar_estribos()
         self.comprimento_estribo()
 
-    def buscar_d(self):
-        n = self.numero * 2 - 1
-        self.d = self.momentos[n].armadura.d
-
     def verificar_altura_minima(self):
         dmin = self.Vsd / (0.27 * self.config.alfa_v2 * self.config.fcd * self.bw)
-        if self.d > dmin:
+        if self.d_min > dmin:
             return True
         else:
             return False
@@ -387,27 +556,27 @@ class Cortante:
         return self.Vsd < self.Vrd2
 
     def espacamento_max(self):
-        if self.Vsd <= 0.67*self.Vrd2:
-            self.s_max = min(0.6*self.d, 0.3)
+        if self.Vsd <= 0.67 * self.Vrd2:
+            self.s_max = min(0.6 * self.d_min, 0.3)
         else:
-            self.s_max = min(0.3 * self.d, 0.2)
+            self.s_max = min(0.3 * self.d_min, 0.2)
 
     def dimensionar_estribos(self):
-        Vsd_max_min = 0.9 * self.config.fywd * self.d * self.Asw_s_min + self.Vc
+        Vsd_max_min = 0.9 * self.config.fywd * self.d_min * self.Asw_s_min + self.Vc
         if self.Vsd < Vsd_max_min:
             self.Asw_s = self.Asw_s_min
         else:
-            self.Asw_s = (self.Vsw)/(0.9 * self.config.fywd * self.d)
+            self.Asw_s = self.Vsw / (0.9 * self.config.fywd * self.d_min)
 
-        self.espacamento = min((2*(0.25*self.diametro**2)/self.Asw_s*self.l), self.s_max)
-        self.numero_de_estribos = np.ceil(self.l/self.espacamento)
-        self.espacamento = self.l/self.numero_de_estribos
+        self.espacamento = min((2 * (0.25 * self.diametro ** 2) / self.Asw_s * self.l), self.s_max)
+        self.numero_de_estribos = np.ceil(self.l / self.espacamento)
+        self.espacamento = self.l / self.numero_de_estribos
 
     def comprimento_estribo(self):
-        self.lg = max(10*self.diametro, 0.07)
-        b = self.bw - 2*self.config.c_viga
-        h = self.h - 2*self.config.c_viga
-        self.comprimento = 2*(self.lg + b + h)
+        self.lg = max(10 * self.diametro, 0.07)
+        b = self.bw - 2 * self.config.c_viga
+        h = self.h - 2 * self.config.c_viga
+        self.comprimento = 2 * (self.lg + b + h)
 
     def __str__(self):
         s = f'Viga: {self.numero_viga}\nSeção: {self.numero}\nDiâmetro: {self.diametro*1e3} mm\n'
@@ -417,53 +586,60 @@ class Cortante:
         s += f'Comprimento do Gancho: {self.lg} m'
         return s
 
+
 if __name__ == '__main__':
-    # from matplotlib import pyplot as plt
-    #
-    # v1 = Viga(1, 12, 0.65, 0.15, (0, 5, 12))
-    # v1.ler_csv_momentos('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/Honorato-m.txt', reg_check=False)
-    # # plt.plot(v1.x_m, -v1.m/1000)
-    # # plt.show()
-    #
-    # v1.procurar_momentos()
-    #
-    # v1.momentos[1].dimensionar_flexao()
-    # v1.momentos[1].escolher_armadura(1)
-    # # print(v1.momentos[1].armadura)
-    #
-    # v1.momentos[2].dimensionar_flexao()
-    # v1.momentos[2].escolher_armadura(1)
-    # # print(v1.momentos[2].armadura)
-    #
-    # v1.momentos[3].dimensionar_flexao()
-    # v1.momentos[3].escolher_armadura(0)
-    # # print(v1.momentos[3].armadura)
-    #
-    # v1.ler_csv_cortantes('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/Honorato-v.txt', reg_check=False)
-    # v1.procurar_cortantes()
-    # print(v1.cortantes[2].d)
-    # print(v1.cortantes[2].verificar_altura_minima())
-    # print(v1.cortantes[2].verificar_esmagamento_biela())
-    # print(v1.cortantes[1])
-    # print(v1.cortantes[2])
+    from matplotlib import pyplot as plt
 
-    v1 = Viga(1, 12, 0.60, 0.15, (0, 6, 12))
-    v1.ler_csv_momentos('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/teste3-m.txt', reg_check=True)
+    v1 = Viga(1, 12, 0.65, 0.15, (0, 5, 12))
+    v1.ler_csv_momentos('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/Honorato-m.txt', reg_check=False)
+    # plt.plot(v1.x_m, -v1.m/1000)
+    # plt.show()
+
     v1.procurar_momentos()
-    v1.momentos[1].dimensionar_flexao()
-    v1.momentos[2].dimensionar_flexao()
-    v1.momentos[3].dimensionar_flexao()
-    v1.momentos[1].escolher_armadura(0)
-    v1.momentos[2].escolher_armadura(0)
-    v1.momentos[3].escolher_armadura(0)
 
-    v1.ler_csv_cortantes('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/teste3-v.txt', reg_check=False)
+    v1.momentos[1].dimensionar_flexao()
+    v1.momentos[1].escolher_armadura(1)
+    # print(v1.momentos[1].armadura)
+
+    v1.momentos[2].dimensionar_flexao()
+    v1.momentos[2].escolher_armadura(1)
+    # print(v1.momentos[2].armadura)
+
+    v1.momentos[3].dimensionar_flexao()
+    v1.momentos[3].escolher_armadura(0)
+    # print(v1.momentos[3].armadura)
+
+    v1.ler_csv_cortantes('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/Honorato-v.txt', reg_check=False)
     v1.procurar_cortantes()
-    print(v1.cortantes[1].d)
-    print(v1.cortantes[1].verificar_altura_minima())
-    print(v1.cortantes[1].verificar_esmagamento_biela())
-    print(v1.cortantes[1])
-    print(v1.cortantes[2])
+    i = 2
+    # print(v1.cortantes[i].x[0], v1.cortantes[i].x[-1])
+    # print(v1.cortantes[i].verificar_altura_minima())
+    # print(v1.cortantes[i].verificar_esmagamento_biela())
+    # print(v1.cortantes[i])
+
+    v1.decalagem()
+    v1.momentos[1].armadura.atribuir_al(v1.al)
+    v1.momentos[1].armadura.calcular_ancoragem()
+    print(v1.momentos[1].armadura)
+
+    """
+    # v1 = Viga(1, 12, 0.60, 0.15, (0, 6, 12))
+    # v1.ler_csv_momentos('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/teste3-m.txt', reg_check=True)
+    # v1.procurar_momentos()
+    # v1.momentos[1].dimensionar_flexao()
+    # v1.momentos[2].dimensionar_flexao()
+    # v1.momentos[3].dimensionar_flexao()
+    # # v1.momentos[1].escolher_armadura(0)
+    # # v1.momentos[2].escolher_armadura(0)
+    # # v1.momentos[3].escolher_armadura(0)
+    #
+    # v1.ler_csv_cortantes('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/teste3-v.txt', reg_check=False)
+    # v1.procurar_cortantes()
+    # print(v1.cortantes[1].d_min)
+    # print(v1.cortantes[1].x[0], v1.cortantes[1].x[-1])
+    # print(v1.cortantes[1].verificar_altura_minima())
+    # print(v1.cortantes[1].verificar_esmagamento_biela())
+    # print(v1.cortantes[1])
 
     # x = v1.cortantes[1].x
     # v = v1.cortantes[1].v
@@ -478,3 +654,4 @@ if __name__ == '__main__':
     #
     # v1.momentos[1].escolher_armadura(0)
     # print(v1.momentos[1].verificar_els_fissura())
+    """

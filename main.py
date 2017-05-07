@@ -135,7 +135,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.add_btn_momentos_viga.click()
 
             # Dimensionar Flexao
-            self.actionDimensionar_Vigas.trigger()
+            self.actionDimensionar_Vigas_Flexao.trigger()
 
             # Cortantes
             self.import_le_cortantes_viga.setText('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/teste3-v.txt')
@@ -185,7 +185,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.widget_cortantes_vigas.grid.addWidget(self.widget_cortantes_vigas.mpl, 1, 1)
 
         # Ações
-        self.actionDimensionar_Vigas.triggered.connect(self.dimensionar_flexao_todas_vigas)
+        self.actionDimensionar_Vigas_Flexao.triggered.connect(self.dimensionar_flexao_todas_vigas)
 
         # Botões
         self.add_btn_carac_viga.clicked.connect(self.add_viga)

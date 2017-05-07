@@ -36,7 +36,7 @@
           <item row="0" column="0">
            <widget class="QTabWidget" name="tabWidget_laje">
             <property name="currentIndex">
-             <number>0</number>
+             <number>6</number>
             </property>
             <widget class="QWidget" name="tab_4">
              <attribute name="title">
@@ -762,7 +762,7 @@ p, li { white-space: pre-wrap; }
             </widget>
             <widget class="QWidget" name="tab_8">
              <attribute name="title">
-              <string>Dimensionamento</string>
+              <string>Detalhamento</string>
              </attribute>
              <layout class="QGridLayout" name="gridLayout_20">
               <item row="0" column="0">
@@ -770,57 +770,6 @@ p, li { white-space: pre-wrap; }
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <widget class="QWidget" name="widget_6" native="true">
-                 <layout class="QGridLayout" name="gridLayout_19">
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_26">
-                    <property name="text">
-                     <string>Número da Laje</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QComboBox" name="nlaje_cbox_dim_laje"/>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QComboBox" name="sec_cbox_dim_laje"/>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_28">
-                    <property name="text">
-                     <string>Diâmetro (mm)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QLineEdit" name="diametro_le_dim_laje"/>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_29">
-                    <property name="text">
-                     <string>Espaçamento (cm)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QLineEdit" name="espac_le_dim_laje"/>
-                  </item>
-                  <item row="4" column="0" colspan="2">
-                   <widget class="QPushButton" name="add_btn_dim_laje">
-                    <property name="text">
-                     <string>Redimensionar</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_27">
-                    <property name="text">
-                     <string>Seção</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
                 <widget class="QTextBrowser" name="textBrowser_dim_laje">
                  <property name="font">
                   <font>
@@ -828,6 +777,52 @@ p, li { white-space: pre-wrap; }
                   </font>
                  </property>
                 </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_16">
+             <attribute name="title">
+              <string>Verificação ELS</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_19">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_14">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_14" native="true">
+                 <layout class="QGridLayout" name="gridLayout_34">
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="nlaje_cbox_els_laje"/>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_44">
+                    <property name="text">
+                     <string>Número da Laje</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0" colspan="2">
+                   <widget class="QPushButton" name="verificar_btn_els_laje">
+                    <property name="text">
+                     <string>Verificar ELS</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_57">
+                    <property name="text">
+                     <string>Coeficiente de Kalmanok</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="kalmanok_le_els_laje"/>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QTextBrowser" name="textBrowser_els_laje"/>
                </widget>
               </item>
              </layout>
@@ -844,7 +839,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QTabWidget" name="tabWidget_Viga">
             <property name="currentIndex">
-             <number>0</number>
+             <number>5</number>
             </property>
             <widget class="QWidget" name="tab_9">
              <attribute name="title">
@@ -981,138 +976,6 @@ p, li { white-space: pre-wrap; }
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="tab_14">
-             <attribute name="title">
-              <string>Dimensionamento à Flexão</string>
-             </attribute>
-             <layout class="QGridLayout" name="gridLayout_27">
-              <item row="0" column="0">
-               <widget class="QSplitter" name="splitter_9">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <widget class="QWidget" name="widget_10" native="true">
-                 <layout class="QGridLayout" name="gridLayout_26">
-                  <item row="0" column="1">
-                   <widget class="QComboBox" name="nviga_cbox_dim_flex_viga"/>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_40">
-                    <property name="text">
-                     <string>Número da Viga</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_41">
-                    <property name="text">
-                     <string>Seção da Viga</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_42">
-                    <property name="text">
-                     <string>Combinação Escolhida</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0" colspan="2">
-                   <widget class="QPushButton" name="verificar_btn_dim_flex_viga">
-                    <property name="text">
-                     <string>Confirmar Escolha</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QComboBox" name="sec_cbox_dim_flex_viga"/>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QComboBox" name="comb_cbox_dim_flex_viga"/>
-                  </item>
-                 </layout>
-                </widget>
-                <widget class="QTextBrowser" name="textBrowser_dim_flex_viga"/>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="">
-             <attribute name="title">
-              <string>Verificação ELS</string>
-             </attribute>
-             <layout class="QGridLayout" name="gridLayout_31">
-              <item row="0" column="0">
-               <widget class="QSplitter" name="splitter_11">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <widget class="QWidget" name="widget_12" native="true">
-                 <layout class="QGridLayout" name="gridLayout_30">
-                  <item row="0" column="1">
-                   <widget class="QComboBox" name="nviga_cbox_dim_flex_viga_2"/>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_43">
-                    <property name="text">
-                     <string>Número da Viga</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_50">
-                    <property name="text">
-                     <string>Ecs</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="5" column="0" colspan="2">
-                   <widget class="QPushButton" name="verificar_btn_dim_flex_viga_2">
-                    <property name="text">
-                     <string>Verificar ELS</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_49">
-                    <property name="text">
-                     <string>Seção da Viga</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QComboBox" name="sec_cbox_dim_flex_viga_2"/>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QLineEdit" name="lineEdit"/>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QLineEdit" name="lineEdit_2"/>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_51">
-                    <property name="text">
-                     <string>Ieq</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="0">
-                   <widget class="QLabel" name="label_52">
-                    <property name="text">
-                     <string>Flecha Máxima</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="1">
-                   <widget class="QLineEdit" name="lineEdit_3"/>
-                  </item>
-                 </layout>
-                </widget>
-                <widget class="QTextBrowser" name="textBrowser_dim_flex_viga_2"/>
-               </widget>
-              </item>
-             </layout>
-            </widget>
             <widget class="QWidget" name="tab_12">
              <attribute name="title">
               <string>Diagrama de Cortante</string>
@@ -1159,6 +1022,68 @@ p, li { white-space: pre-wrap; }
               </item>
              </layout>
             </widget>
+            <widget class="QWidget" name="tab_14">
+             <attribute name="title">
+              <string>Dimensionamento à Flexão</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_27">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_13">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_10" native="true">
+                 <layout class="QGridLayout" name="gridLayout_26">
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="nviga_cbox_dim_flex_viga"/>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_40">
+                    <property name="text">
+                     <string>Número da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_41">
+                    <property name="text">
+                     <string>Seção da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_42">
+                    <property name="text">
+                     <string>Combinação Escolhida</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0" colspan="2">
+                   <widget class="QPushButton" name="verificar_btn_dim_flex_viga">
+                    <property name="text">
+                     <string>Confirmar Escolha</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QComboBox" name="sec_cbox_dim_flex_viga"/>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QComboBox" name="comb_cbox_dim_flex_viga"/>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QSplitter" name="splitter_9">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <widget class="QTextBrowser" name="textBrowser_dim_flex_viga2"/>
+                 <widget class="QTextBrowser" name="textBrowser_dim_flex_viga"/>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
             <widget class="QWidget" name="tab_10">
              <attribute name="title">
               <string>Dimensionamento ao Cisalhamento</string>
@@ -1169,59 +1094,102 @@ p, li { white-space: pre-wrap; }
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <widget class="QWidget" name="widget_11" native="true">
-                 <layout class="QGridLayout" name="gridLayout_28">
-                  <item row="4" column="0" colspan="2">
-                   <widget class="QPushButton" name="pushButton_7">
-                    <property name="text">
-                     <string>Redimensionar</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_45">
-                    <property name="text">
-                     <string>Comprimento da Viga</string>
-                    </property>
-                   </widget>
-                  </item>
+                <widget class="QTextBrowser" name="textBrowser_dim_cis_viga"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="">
+             <attribute name="title">
+              <string>Verificação ELS</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_31">
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter_11">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <widget class="QWidget" name="widget_12" native="true">
+                 <layout class="QGridLayout" name="gridLayout_30">
                   <item row="0" column="1">
-                   <widget class="QComboBox" name="comboBox_5"/>
+                   <widget class="QComboBox" name="nviga_cbox_els_viga"/>
                   </item>
                   <item row="0" column="0">
-                   <widget class="QLabel" name="label_44">
+                   <widget class="QLabel" name="label_43">
                     <property name="text">
                      <string>Número da Viga</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="1">
-                   <widget class="QLineEdit" name="lineEdit_9"/>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QLineEdit" name="lineEdit_8"/>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_47">
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_50">
                     <property name="text">
-                     <string>Largura da Viga</string>
+                     <string>Ecs</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_46">
+                  <item row="5" column="0" colspan="2">
+                   <widget class="QPushButton" name="verificar_btn_els_viga">
                     <property name="text">
-                     <string>Altura da Viga</string>
+                     <string>Verificar ELS</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_49">
+                    <property name="text">
+                     <string>Seção da Viga</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QComboBox" name="sec_cbox_els_viga"/>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="ecs_le_els_viga">
+                    <property name="readOnly">
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="QLineEdit" name="lineEdit_10"/>
+                   <widget class="QLineEdit" name="ieq_le_els_viga">
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_51">
+                    <property name="text">
+                     <string>Ieq</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_52">
+                    <property name="text">
+                     <string>Flecha Máxima</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QLineEdit" name="flecha_le_els_viga"/>
                   </item>
                  </layout>
                 </widget>
-                <widget class="QTextBrowser" name="textBrowser_3"/>
+                <widget class="QTextBrowser" name="textBrowser_els_viga"/>
                </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_15">
+             <attribute name="title">
+              <string>Detalhamento</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_28">
+              <item row="0" column="0">
+               <widget class="QTextBrowser" name="textBrowser_detalhamento_viga"/>
               </item>
              </layout>
             </widget>
@@ -1232,6 +1200,11 @@ p, li { white-space: pre-wrap; }
         <widget class="QWidget" name="tab_3">
          <attribute name="title">
           <string>Pilares</string>
+         </attribute>
+        </widget>
+        <widget class="QWidget" name="tab_17">
+         <attribute name="title">
+          <string>Memorial de Cálculo</string>
          </attribute>
         </widget>
        </widget>
@@ -1281,7 +1254,8 @@ p, li { white-space: pre-wrap; }
      <string>Calcular</string>
     </property>
     <addaction name="actionDimensionar_Lajes"/>
-    <addaction name="actionDimensionar_Vigas"/>
+    <addaction name="actionDimensionar_Vigas_Flexao"/>
+    <addaction name="actionDimensionar_Vigas_Cisalhamento"/>
     <addaction name="actionDimensionar_Pilares"/>
    </widget>
    <addaction name="menuArquivo"/>
@@ -1364,9 +1338,9 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+!</string>
    </property>
   </action>
-  <action name="actionDimensionar_Vigas">
+  <action name="actionDimensionar_Vigas_Flexao">
    <property name="text">
-    <string>Dimensionar Vigas</string>
+    <string>Dimensionar Vigas - Flexão</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+@</string>
@@ -1378,6 +1352,11 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="shortcut">
     <string>Ctrl+#</string>
+   </property>
+  </action>
+  <action name="actionDimensionar_Vigas_Cisalhamento">
+   <property name="text">
+    <string>Dimensionar Vigas - Cisalhamento</string>
    </property>
   </action>
  </widget>
@@ -1426,11 +1405,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>remov_linha_btn_compat_laje</tabstop>
   <tabstop>add_compt_btn_compat_laje</tabstop>
   <tabstop>textBrowser_compat_laje</tabstop>
-  <tabstop>nlaje_cbox_dim_laje</tabstop>
-  <tabstop>sec_cbox_dim_laje</tabstop>
-  <tabstop>diametro_le_dim_laje</tabstop>
-  <tabstop>espac_le_dim_laje</tabstop>
-  <tabstop>add_btn_dim_laje</tabstop>
   <tabstop>textBrowser_dim_laje</tabstop>
  </tabstops>
  <resources/>
