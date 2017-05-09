@@ -42,6 +42,24 @@ class Laje:
         self.Xy1 = None
         self.Xy2 = None
 
+        self.verFlecha = None
+
+    def verificar_els_deformacao(self, omega):
+        D = (self.config.Ecs * self.h ** 3) / 12
+        fi = (omega * self.carga.carga_total * self.lx ** 4) / D
+
+        ksi_t = 0.68
+        alfa_f = ksi_t
+        fdif = alfa_f * fi
+        ftotal = fi + fdif
+
+        if ftotal <= self.lx / 250:
+            self.verFlecha = True
+            return True
+        else:
+            self.verFlecha = False
+            return False
+
     def calc_cargas(self,
                     superior_espessura, superior_densidade,
                     inferior_espessura, inferior_densidade,

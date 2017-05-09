@@ -26,7 +26,7 @@
          <bool>false</bool>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -839,7 +839,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QTabWidget" name="tabWidget_Viga">
             <property name="currentIndex">
-             <number>5</number>
+             <number>3</number>
             </property>
             <widget class="QWidget" name="tab_9">
              <attribute name="title">
@@ -1077,8 +1077,8 @@ p, li { white-space: pre-wrap; }
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
-                 <widget class="QTextBrowser" name="textBrowser_dim_flex_viga2"/>
                  <widget class="QTextBrowser" name="textBrowser_dim_flex_viga"/>
+                 <widget class="QTextBrowser" name="textBrowser_dim_flex_viga2"/>
                 </widget>
                </widget>
               </item>

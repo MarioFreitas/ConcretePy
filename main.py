@@ -1,6 +1,8 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+import os
+import re
 import sys
 import pickle
 from ConcretePy.gui.mainWindowGUI import Ui_MainWindow
@@ -18,6 +20,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Ajustes Visuais
         self.setupUi(self)
         self.setWindowIcon(QIcon('./img/icon_64.ico'))
+        qss = self.open_qss('./gui/css/darkBlue/style.qss')
+        # self.setStyleSheet(qss)
+        app.setStyleSheet(qss)
 
         # InputData / OutputData
         self.inputData = InputData()
@@ -141,6 +146,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.import_le_cortantes_viga.setText('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/teste3-v.txt')
             self.add_btn_cortantes_viga.click()
 
+    def open_qss(self, path):
+        """
+        opens a Qt stylesheet with a path relative to the project
+
+        Note: it changes the urls in the Qt stylesheet (in memory), and makes these urls relative to the project
+        Warning: the urls in the Qt stylesheet should have the forward slash ('/') as the pathname separator
+        """
+        with open(path) as f:
+            qss = f.read()
+            pattern = r'url\((.*?)\);'
+            for url in sorted(set(re.findall(pattern, qss)), key=len, reverse=True):
+                directory, basename = os.path.split(path)
+                new_url = os.path.join(directory, *url.split('/'))
+                new_url = os.path.normpath(new_url)
+                new_url = new_url.replace(os.path.sep, '/')
+                qss = qss.replace(url, new_url)
+            return qss
+
     def init_menus(self):
         self.actionNovo.triggered.connect(self.new_file)
         self.actionAbrir.triggered.connect(self.open_file)
@@ -162,14 +185,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.add_linha_btn_compat_laje.clicked.connect(self.add_linha_compat_laje)
         self.remov_linha_btn_compat_laje.clicked.connect(self.remov_linha_compat_laje)
         self.add_compt_btn_compat_laje.clicked.connect(self.compat_momentos_laje)
-        self.add_btn_dim_laje.clicked.connect(self.dimensionar_elemento_laje)
+        # self.add_btn_dim_laje.clicked.connect(self.dimensionar_elemento_laje)
+        self.verificar_btn_els_laje.clicked.connect(self.verificar_els_laje)
 
         # ComboBox Index Change
         self.nlaje_cbox_carac_laje.currentIndexChanged.connect(self.change_carac_cbox_laje)
         self.nlaje_cbox_carg_laje.currentIndexChanged.connect(self.change_carga_cbox_laje)
         self.nlaje_cbox_reac_laje.currentIndexChanged.connect(self.change_reac_cbox_laje)
         self.nlaje_cbox_momento_laje.currentIndexChanged.connect(self.change_momento_cbox_laje)
-        self.nlaje_cbox_dim_laje.currentIndexChanged.connect(self.change_dim_cbox_laje)
+        # self.nlaje_cbox_dim_laje.currentIndexChanged.connect(self.change_dim_cbox_laje)
 
     def init_vigas(self):
         # Widget Momentos Plt
@@ -439,8 +463,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.nlaje_cbox_carac_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje)) + 1))
             self.nlaje_cbox_carg_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
             self.nlaje_cbox_momento_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
-            self.nlaje_cbox_dim_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
+            # self.nlaje_cbox_dim_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
             self.nlaje_cbox_reac_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
+            self.nlaje_cbox_els_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
             self.nlaje_cbox_carac_laje.setCurrentIndex(self.nlaje_cbox_carac_laje.currentIndex() + 1)
         else:
             self.nlaje_cbox_carac_laje.setCurrentIndex(self.nlaje_cbox_carac_laje.currentIndex() + 1)
@@ -784,6 +809,32 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def dimensionar_elemento_laje(self):
         pass
 
+    def verificar_els_laje(self):
+        n = get_text(self.nlaje_cbox_els_laje)
+        omega = get_text(self.kalmanok_le_els_laje)
+
+        if not self.check_error01((omega,)):
+            return
+
+        n = int(n)
+        omega = float(omega)
+
+        flag = self.inputData.lajes[n].verificar_els_deformacao(omega)
+
+        if not flag:
+            error_title = "Error 11"
+            error_msg = "Laje não passou no ELS-DEF."
+            QMessageBox.warning(self, error_title, error_msg, QMessageBox.Ok)
+
+        self.update_els_laje_text()
+
+    def update_els_laje_text(self):
+        s = ''
+        for laje in self.inputData.lajes.values():
+            s += f'Laje {laje.numero}\nVerificação de flecha: {laje.verFlecha}\n\n'
+
+        self.textBrowser_els_laje.setText(s)
+
     def change_carac_cbox_laje(self):
         try:
             n = int(get_text(self.nlaje_cbox_carac_laje))
@@ -1046,6 +1097,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.change_nviga_cbox_dim_flex_viga()
         self.change_sec_cbox_dim_flex_viga()
+        # self.update_dim_flex_text()
+        self.update_dim_flex_text2()
 
     def update_dim_flex_text(self):
         s = ''
@@ -1056,6 +1109,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             s += str(self.inputData.vigas[viga].momentos[sec].possibilidades[i])
             s += '\n\n'
         self.textBrowser_dim_flex_viga.setText(s)
+
+    def update_dim_flex_text2(self):
+        s = ''
+        for viga in self.inputData.vigas.values():
+            for i, sec in zip(range(len(viga.momentos.values())), viga.momentos.values()):
+                armadura = sec.armadura
+                s += f'Viga {viga.numero} - Seção {i+1}\n{armadura}\n\n'
+
+        self.textBrowser_dim_flex_viga2.setText(s)
 
     def add_cortantes_vigas(self):
         n = int(get_text(self.nviga_cbox_cortantes_viga))
