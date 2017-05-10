@@ -1284,6 +1284,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pass
 
 
+# Main
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     GUI = MainWindow()
