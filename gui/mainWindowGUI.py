@@ -768,7 +768,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(1)
         self.tabWidget_laje.setCurrentIndex(6)
-        self.tabWidget_Viga.setCurrentIndex(3)
+        self.tabWidget_Viga.setCurrentIndex(5)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.tabWidget, self.nlaje_cbox_carac_laje)
         MainWindow.setTabOrder(self.nlaje_cbox_carac_laje, self.lx_le_carac_laje)
@@ -960,6 +960,7 @@ class Ui_MainWindow(object):
         self.actionDimensionar_Vigas_Flexao.setText(_translate("MainWindow", "Dimensionar Vigas - Flexão"))
         self.actionDimensionar_Vigas_Flexao.setShortcut(_translate("MainWindow", "Ctrl+@"))
         self.actionDimensionar_Pilares.setText(_translate("MainWindow", "Dimensionar Pilares"))
-        self.actionDimensionar_Pilares.setShortcut(_translate("MainWindow", "Ctrl+#"))
+        self.actionDimensionar_Pilares.setShortcut(_translate("MainWindow", "Ctrl+$"))
         self.actionDimensionar_Vigas_Cisalhamento.setText(_translate("MainWindow", "Dimensionar Vigas - Cisalhamento"))
+        self.actionDimensionar_Vigas_Cisalhamento.setShortcut(_translate("MainWindow", "Ctrl+#"))
 

@@ -36,6 +36,8 @@ class Viga:
         self.Vsd_max = None
         self.al = None
 
+        self.flecha = None
+
     def __repr__(self):
         s = 'Viga {}\nL = {}\nh = {}\nbw = {}'.format(self.numero, self.l, self.h, self.bw)
         return s
@@ -248,6 +250,10 @@ class Momento:
         self.possibilidades = None
         self.armadura = None
 
+        self.verFissura = None
+        self.verDef = None
+        self.flecha = None
+
         self.limitar_diagrama_momentos()
 
     def __str__(self):
@@ -366,21 +372,51 @@ class Momento:
     def verificar_els_fissura(self):
         Mr = 0.25 * self.bw * (self.h ** 2) * self.config.fctk_inf
         if self.Msd < Mr:
+            self.verFissura = 'Não há formação de fissura'
             return 'Não há formação de fissura'
 
         diametro = round(self.armadura.diametro, 3)
 
         if diametro <= 8.:
+            self.verFissura = 'Abertura de fissura ok'
             return 'Abertura de fissura ok'
         else:
             s_max = espacamento_max_fissura[diametro]
             if self.armadura.espacamento <= s_max:
+                self.verFissura = 'Abertura de fissura ok'
                 return 'Abertura de fissura ok'
             else:
+                self.verFissura = 'Abertura de fissura FALHOU'
                 return 'Abertura de fissura FALHOU'
 
-    def verificar_els_deformacao(self, armadura):
+    def obter_Ecs_Ieq(self):
         Mr = 0.25 * self.bw * (self.h ** 2) * self.config.fct_m
+        Ma = self.Msd
+        Mr_Ma3 = (Mr / Ma) ** 3
+        Ecs = self.config.Ecs
+        Es = self.config.Es
+        Ic = (1 / 12) * self.bw * self.h ** 3
+        d = self.armadura.d
+        x = 0.3 * d
+        z = 0.9 * d
+        Iii = (Es / Ecs) * self.armadura.As_adotada * z * (d - x)
+        Ieq = min(Ic, Mr_Ma3 * Ic + (1 - Mr_Ma3) * Iii)
+
+        return [Ecs, Ieq]
+
+    def verificar_els_deformacao(self, fi):
+        self.flecha = fi
+        ksi_t = 0.68
+        alfa_f = ksi_t
+        fdif = alfa_f * fi
+        ftotal = fi + fdif
+
+        if ftotal < self.l / 250:
+            self.verDef = True
+            return True
+        else:
+            self.verDef = False
+            return False
 
     def limitar_diagrama_momentos(self):
         x = list(self.x)
@@ -503,13 +539,25 @@ class ArmaduraFlexao:
 
     def __str__(self):
         s = f'{self.numero_barras} barras de {self.diametro*1e3} mm dispostas em {self.linhas} linhas\n'
-        s += f'Área de aço calculada: {self.As_calc*1e4:.2f} cm²\nÁrea de aço adotada: {self.As_adotada*1e4:.2f} cm²\n'
         s += f'Espaçamento: {self.espacamento*100:.2f} cm\n'
-        s += f'Comprimento da primeira linha: {self.comprimento_l1} m\n'
+        s += f'Área de aço calculada: {self.As_calc*1e4:.2f} cm²\nÁrea de aço adotada: {self.As_adotada*1e4:.2f} cm²\n'
+
+        l1 = self.comprimento_l1
+        l2 = self.comprimento_l2
+        l3 = self.comprimento_l3
+
+        if isinstance(l1, float):
+            l1 = f'{l1:.2f}'
+        if isinstance(l2, float):
+            l2 = f'{l2:.2f}'
+        if isinstance(l3, float):
+            l3 = f'{l3:.2f}'
+
+        s += f'Comprimento da primeira linha: {l1} m\n'
         if self.linhas > 1:
-            s += f'Comprimento da segunda linha: {self.comprimento_l2} m\n'
+            s += f'Comprimento da segunda linha: {l2} m\n'
         if self.linhas > 2:
-            s += f'Comprimento da terceira linha: {self.comprimento_l3} m\n'
+            s += f'Comprimento da terceira linha: {l3} m\n'
         return s
 
 
@@ -534,6 +582,11 @@ class Cortante:
         self.Vrd2 = 0.27 * self.config.alfa_v2 * self.config.fcd * self.bw * self.d_min
         self.Vsw = self.Vsd - self.Vc
 
+        self.verAlturaMin = None
+        self.verEsmagamento = None
+        self.verificar_esmagamento_biela()
+        self.verificar_altura_minima()
+
         self.diametro = 0.0063
         self.Asw_s = None
         self.espacamento = None
@@ -548,11 +601,14 @@ class Cortante:
     def verificar_altura_minima(self):
         dmin = self.Vsd / (0.27 * self.config.alfa_v2 * self.config.fcd * self.bw)
         if self.d_min > dmin:
+            self.verAlturaMin = True
             return True
         else:
+            self.verAlturaMin = False
             return False
 
     def verificar_esmagamento_biela(self):
+        self.verEsmagamento = self.Vsd < self.Vrd2
         return self.Vsd < self.Vrd2
 
     def espacamento_max(self):
@@ -579,11 +635,13 @@ class Cortante:
         self.comprimento = 2 * (self.lg + b + h)
 
     def __str__(self):
-        s = f'Viga: {self.numero_viga}\nSeção: {self.numero}\nDiâmetro: {self.diametro*1e3} mm\n'
-        s += f'Quantidade: {self.numero_de_estribos:.0f} estribos\nEspaçamento: {self.espacamento*100:.1f} cm\n'
+        s = f'Viga {self.numero_viga} - Seção {self.numero}\nDiâmetro: {self.diametro*1e3} mm\n'
+        s += f'Quantidade: {self.numero_de_estribos:.0f} estribos\n'
+        s += f'Posição: {self.x[0]} m a {self.x[-1]} m\n'
+        s += f'Espaçamento: {self.espacamento*100:.1f} cm\n'
         s += f'Espaçamento Máximo: {self.s_max*100:.1f} cm\n'
-        s += f'Comprimento do Estribo: {self.comprimento} m\n'
-        s += f'Comprimento do Gancho: {self.lg} m'
+        s += f'Comprimento do Estribo: {self.comprimento - 2*self.lg: .2f} + 2 x {self.lg:.2f} m\n'
+        # s += f'Comprimento do Gancho: {self.lg} m'
         return s
 
 
@@ -612,15 +670,16 @@ if __name__ == '__main__':
     v1.ler_csv_cortantes('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/Honorato-v.txt', reg_check=False)
     v1.procurar_cortantes()
     i = 2
-    # print(v1.cortantes[i].x[0], v1.cortantes[i].x[-1])
-    # print(v1.cortantes[i].verificar_altura_minima())
-    # print(v1.cortantes[i].verificar_esmagamento_biela())
-    # print(v1.cortantes[i])
+    print(v1.cortantes[i].x[0], v1.cortantes[i].x[-1])
+    print(v1.cortantes[i].verificar_altura_minima())
+    print(v1.cortantes[i].verificar_esmagamento_biela())
+    print(v1.cortantes[i])
 
     v1.decalagem()
     v1.momentos[1].armadura.atribuir_al(v1.al)
     v1.momentos[1].armadura.calcular_ancoragem()
     print(v1.momentos[1].armadura)
+    print(v1.momentos[1].verificar_els_fissura())
 
     """
     # v1 = Viga(1, 12, 0.60, 0.15, (0, 6, 12))

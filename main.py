@@ -39,7 +39,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.show()
 
         # DEBUG OPTIONS
-        DEBUG = True
+        DEBUG = False
         if DEBUG:
             ### Lajes ###
             # Caracterização
@@ -146,6 +146,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.import_le_cortantes_viga.setText('C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/teste3-v.txt')
             self.add_btn_cortantes_viga.click()
 
+            # Dimensionar Cortantes
+            self.actionDimensionar_Vigas_Cisalhamento.trigger()
+
     def open_qss(self, path):
         """
         opens a Qt stylesheet with a path relative to the project
@@ -210,6 +213,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Ações
         self.actionDimensionar_Vigas_Flexao.triggered.connect(self.dimensionar_flexao_todas_vigas)
+        self.actionDimensionar_Vigas_Cisalhamento.triggered.connect(self.dimensionar_cortante_todas_vigas)
 
         # Botões
         self.add_btn_carac_viga.clicked.connect(self.add_viga)
@@ -217,11 +221,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.import_btn_momentos_viga.clicked.connect(self.import_momentos_vigas)
         self.add_btn_momentos_viga.clicked.connect(self.add_momentos_vigas)
         self.add_btn_cortantes_viga.clicked.connect(self.add_cortantes_vigas)
+        self.verificar_btn_els_viga.clicked.connect(self.verificar_els_viga)
 
         # ComboBox Index Change
         self.nviga_cbox_carac_viga.currentIndexChanged.connect(self.change_carac_cbox_viga)
         self.nviga_cbox_dim_flex_viga.currentIndexChanged.connect(self.change_nviga_cbox_dim_flex_viga)
         self.sec_cbox_dim_flex_viga.currentIndexChanged.connect(self.change_sec_cbox_dim_flex_viga)
+        self.nviga_cbox_els_viga.currentIndexChanged.connect(self.change_nviga_cbox_els_viga)
+        self.sec_cbox_els_viga.currentIndexChanged.connect(self.change_sec_cbox_els_viga)
 
     def init_pilares(self):
         pass
@@ -269,10 +276,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     mx_ = laje.mx_
                     my = laje.my
                     my_ = laje.my_
+                    omega = laje.omega
                     file.write(f'Laje {i}\n')
                     file.write(f'Laje({numero}, {lx}, {ly}, {h}, "{apoio}")\n')
                     file.write(f'calc_cargas({superior_espessura}, {superior_densidade}, {inferior_espessura}, {inferior_densidade}, {contrapiso_espessura}, {contrapiso_densidade}, "{parede_caso}", {parede_espessura}, {parede_perimetro}, {parede_altura}, {carga_utilizacao})\n')
-                    file.write(f'{vx}, {vx_}, {vy}, {vy_}, {mx}, {mx_}, {my}, {my_}\n\n')
+                    file.write(f'{vx}, {vx_}, {vy}, {vy_}, {mx}, {mx_}, {my}, {my_}\n')
+                    file.write(f'{omega}\n\n')
 
                 file.write(f'{self.inputData.table_rows_compat_lajes_indices}\n\n')
 
@@ -284,9 +293,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     bw = viga.bw
                     nos = viga.nos
                     fileNameM = viga.fileNameM
+                    fileNameV = viga.fileNameV
                     file.write(f'Viga {i}\n')
                     file.write(f'Viga({numero}, {l}, {h}, {bw}, {nos})\n')
-                    file.write(f'{fileNameM}\n\n')
+                    file.write(f'{fileNameM}\n')
+                    file.write(f'{fileNameV}\n\n')
 
     def save_file_as(self):
         self.fileName = QFileDialog.getSaveFileName(self, 'Salvar como', './save', filter="ConctrePy File(*.cpfl)")[0]
@@ -303,7 +314,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             fileName = QFileDialog.getOpenFileName(self, 'Abrir arquivo', './save', filter="ConctrePy File(*.cpfl)")[0]
             if fileName == '':
                 return None
-            self.new_file()
+            # self.new_file()
             self.fileName = fileName
         self.setWindowTitle('ConcretePy - [{}]'.format(self.fileName))
 
@@ -320,6 +331,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.inputData.lajes[i].calc_cargas
                 eval(f'self.inputData.lajes[{i}].{file.readline()}')
                 [vx,  vx_, vy, vy_, mx, mx_, my, my_] = file.readline().split(', ')
+                omega = file.readline()
                 self.inputData.lajes[i].vx = eval(vx)
                 self.inputData.lajes[i].vx_ = eval(vx_)
                 self.inputData.lajes[i].vy = eval(vy)
@@ -328,6 +340,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.inputData.lajes[i].mx_ = eval(mx_)
                 self.inputData.lajes[i].my = eval(my)
                 self.inputData.lajes[i].my_ = eval(my_)
+                self.inputData.lajes[i].omega = eval(omega)
+
                 file.readline()
 
             self.inputData.table_rows_compat_lajes_indices = eval(file.readline())
@@ -338,6 +352,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 viga = eval(file.readline())
                 self.inputData.vigas.update({i: viga})
                 self.inputData.vigas[i].fileNameM = file.readline()
+                self.inputData.vigas[i].fileNameV = file.readline()
 
 
         # Carregar Lajes na GUI
@@ -345,8 +360,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.nlaje_cbox_carac_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje)) + 1))
             self.nlaje_cbox_carg_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
             self.nlaje_cbox_momento_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
-            self.nlaje_cbox_dim_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
+            # self.nlaje_cbox_dim_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
             self.nlaje_cbox_reac_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
+            self.nlaje_cbox_els_laje.addItem(str(int(get_text(self.nlaje_cbox_carac_laje))))
             self.nlaje_cbox_carac_laje.setCurrentIndex(self.nlaje_cbox_carac_laje.currentIndex() + 1)
 
         for i in self.inputData.lajes:
@@ -1135,13 +1151,87 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.widget_cortantes_vigas.mpl.mplCanvas.plot_cortante(x, v)
 
     def dimensionar_cortante_todas_vigas(self):
-        for viga in self.inputData.vigas.keys():
-            self.inputData.vigas[viga].procurar_momentos()
-            for momento in self.inputData.vigas[viga].momentos.keys():
-                self.inputData.vigas[viga].momentos[momento].dimensionar_flexao()
+        for viga in self.inputData.vigas.values():
+            viga.procurar_cortantes()
+            for cortante in viga.cortantes.values():
+                ver1 = cortante.verificar_altura_minima()
+                ver2 = cortante.verificar_esmagamento_biela()
 
-        self.change_nviga_cbox_dim_flex_viga()
-        self.change_sec_cbox_dim_flex_viga()
+                if not ver1:
+                    error_title = "Error 12A"
+                    error_msg = "Alguma viga não passou na verificação de altura mínima"
+                    QMessageBox.warning(self, error_title, error_msg, QMessageBox.Ok)
+
+                if not ver2:
+                    error_title = "Error 12B"
+                    error_msg = "Alguma viga não passou na verificação de esmagamento da biela"
+                    QMessageBox.warning(self, error_title, error_msg, QMessageBox.Ok)
+
+        self.update_dim_cis_viga_text()
+
+        for viga in self.inputData.vigas.values():
+            viga.decalagem()
+            for momento in viga.momentos.values():
+                momento.armadura.atribuir_al(viga.al)
+                momento.armadura.calcular_ancoragem()
+
+        self.update_dim_flex_text2()
+
+        for n in range(1, len(self.inputData.vigas) + 1):
+            self.nviga_cbox_els_viga.addItem(str(n))
+            self.nviga_cbox_els_viga.setCurrentIndex(0)
+
+        # self.change_nviga_cbox_els_viga()
+
+    def update_dim_cis_viga_text(self):
+        s = ''
+        for viga in self.inputData.vigas.values():
+            for cortante in viga.cortantes.values():
+                s += f'{cortante}'
+
+        self.textBrowser_dim_cis_viga.setText(s)
+
+    def verificar_els_viga(self):
+        viga = get_text(self.nviga_cbox_els_viga)
+        sec = get_text(self.sec_cbox_els_viga)
+        flecha = get_text(self.flecha_le_els_viga)
+
+        if not self.check_error01((flecha,)):
+            return
+
+        viga = int(viga)
+        sec = int(sec)
+        flecha = float(flecha)
+
+        self.inputData.vigas[viga].momentos[sec].verificar_els_fissura()
+        self.inputData.vigas[viga].momentos[sec].verificar_els_deformacao(flecha)
+
+        self.update_els_viga_text()
+
+    def update_els_viga_text(self):
+        s = ''
+        for viga in self.inputData.vigas.values():
+            for sec in viga.momentos.values():
+                s += f'Viga {viga.numero} - Seção {sec.id}\n'
+                s += f'Verificação de flecha: {sec.verDef}\nVerificação de fissura: {sec.verFissura}\n\n'
+
+        self.textBrowser_els_viga.setText(s)
+
+    def change_nviga_cbox_els_viga(self):
+        viga = int(get_text(self.nviga_cbox_els_viga))
+        self.sec_cbox_els_viga.clear()
+        for i in range(len(self.inputData.vigas[viga].momentos)):
+            self.sec_cbox_els_viga.addItem(str(i + 1))
+        self.sec_cbox_els_viga.setCurrentIndex(0)
+
+    def change_sec_cbox_els_viga(self):
+        viga = int(get_text(self.nviga_cbox_els_viga))
+        sec = int(get_text(self.sec_cbox_els_viga))
+        (Ecs, Ieq) = self.inputData.vigas[viga].momentos[sec].obter_Ecs_Ieq()
+        flecha = self.inputData.vigas[viga].momentos[sec].flecha
+        self.ecs_le_els_viga.setText(f'{Ecs/1e6: .0f}')
+        self.ieq_le_els_viga.setText(f'{Ieq*1e12: .4E}')
+        self.flecha_le_els_viga.setText(f'{flecha}')
 
     def change_nviga_cbox_dim_flex_viga(self):
         viga = int(get_text(self.nviga_cbox_dim_flex_viga))

@@ -839,7 +839,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QTabWidget" name="tabWidget_Viga">
             <property name="currentIndex">
-             <number>3</number>
+             <number>5</number>
             </property>
             <widget class="QWidget" name="tab_9">
              <attribute name="title">
@@ -1351,12 +1351,15 @@ p, li { white-space: pre-wrap; }
     <string>Dimensionar Pilares</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+#</string>
+    <string>Ctrl+$</string>
    </property>
   </action>
   <action name="actionDimensionar_Vigas_Cisalhamento">
    <property name="text">
     <string>Dimensionar Vigas - Cisalhamento</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+#</string>
    </property>
   </action>
  </widget>

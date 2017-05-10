@@ -42,9 +42,11 @@ class Laje:
         self.Xy1 = None
         self.Xy2 = None
 
+        self.omega = None
         self.verFlecha = None
 
     def verificar_els_deformacao(self, omega):
+        self.omega = omega
         D = (self.config.Ecs * self.h ** 3) / 12
         fi = (omega * self.carga.carga_total * self.lx ** 4) / D
 
@@ -123,20 +125,21 @@ class Laje:
                 self.Xy2 = Momento(self.my_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xy2', self)
             elif self.apoio == 'Caso 5A':
                 self.Xx1 = Momento(self.mx_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xx1', self)
-                self.Xx2 = Momento(self.mx_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xx2', self)
                 self.Xy1 = Momento(self.my_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xy1', self)
+                self.Xy2 = Momento(self.mx_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xx2', self)
             elif self.apoio == 'Caso 5B':
                 self.Xx1 = Momento(self.mx_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xx1', self)
+                self.Xx2 = Momento(self.my_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xy2', self)
                 self.Xy1 = Momento(self.my_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xy1', self)
-                self.Xy2 = Momento(self.my_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xy2', self)
             elif self.apoio == 'Caso 6':
                 self.Xx1 = Momento(self.mx_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xx1', self)
                 self.Xx2 = Momento(self.mx_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xx2', self)
                 self.Xy1 = Momento(self.my_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xy1', self)
                 self.Xy2 = Momento(self.my_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xy2', self)
         else:
-            # TODO caso de lambda > 2
-            pass
+            self.Mx = Momento(self.mx * self.carga.carga_total * (self.lx ** 2) / 100, 'Mx', self)
+            self.Xx1 = Momento(self.mx_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xx1', self)
+            self.Xy1 = Momento(self.my_ * self.carga.carga_total * (self.lx ** 2) / 100, 'Xy1', self)
 
     def __repr__(self):
         return 'Laje L{}'.format(self.numero)
