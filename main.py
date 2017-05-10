@@ -280,7 +280,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     omega = laje.omega
                     file.write(f'Laje {i}\n')
                     file.write(f'Laje({numero}, {lx}, {ly}, {h}, "{apoio}")\n')
-                    file.write(f'calc_cargas({superior_espessura}, {superior_densidade}, {inferior_espessura}, {inferior_densidade}, {contrapiso_espessura}, {contrapiso_densidade}, "{parede_caso}", {parede_espessura}, {parede_perimetro}, {parede_altura}, {carga_utilizacao})\n')
+                    file.write(
+                        f'calc_cargas({superior_espessura}, {superior_densidade}, {inferior_espessura}, {inferior_densidade}, {contrapiso_espessura}, {contrapiso_densidade}, "{parede_caso}", {parede_espessura}, {parede_perimetro}, {parede_altura}, {carga_utilizacao})\n')
                     file.write(f'{vx}, {vx_}, {vy}, {vy_}, {mx}, {mx_}, {my}, {my_}\n')
                     file.write(f'{omega}\n\n')
 
@@ -331,7 +332,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.inputData.lajes.update({i: laje})
                 self.inputData.lajes[i].calc_cargas
                 eval(f'self.inputData.lajes[{i}].{file.readline()}')
-                [vx,  vx_, vy, vy_, mx, mx_, my, my_] = file.readline().split(', ')
+                [vx, vx_, vy, vy_, mx, mx_, my, my_] = file.readline().split(', ')
                 omega = file.readline()
                 self.inputData.lajes[i].vx = eval(vx)
                 self.inputData.lajes[i].vx_ = eval(vx_)
@@ -354,7 +355,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.inputData.vigas.update({i: viga})
                 self.inputData.vigas[i].fileNameM = file.readline().strip('\n')
                 self.inputData.vigas[i].fileNameV = file.readline().strip('\n')
-
 
         # Carregar Lajes na GUI
         for i in self.inputData.lajes:
@@ -1092,6 +1092,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         n = int(get_text(self.nviga_cbox_momentos_viga))
         fileName = QFileDialog.getOpenFileName(self, 'Importar Momento', './save/diagrams',
                                                filter="Arquivo de Texto(*.txt)")[0]
+        cwd = os.getcwd()
+        cwd = cwd.replace('\\', '/')
+        fileName = fileName.replace(cwd, '.')
         self.import_le_momentos_viga.setText(fileName)
         self.add_momentos_vigas()
 
@@ -1144,6 +1147,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         n = int(get_text(self.nviga_cbox_cortantes_viga))
         fileName = QFileDialog.getOpenFileName(self, 'Importar Momento', './save/diagrams',
                                                filter="Arquivo de Texto(*.txt)")[0]
+        cwd = os.getcwd()
+        cwd = cwd.replace('\\', '/')
+        fileName = fileName.replace(cwd, '.')
         self.import_le_cortantes_viga.setText(fileName)
         self.add_cortantes_vigas()
 
@@ -1193,7 +1199,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.nviga_cbox_els_viga.addItem(str(n))
             self.nviga_cbox_els_viga.setCurrentIndex(0)
 
-        # self.change_nviga_cbox_els_viga()
+            # self.change_nviga_cbox_els_viga()
 
     def update_dim_cis_viga_text(self):
         s = ''

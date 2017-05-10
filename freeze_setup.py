@@ -17,13 +17,15 @@ icon = './img/icon_64.ico'
 targetName = 'ConcretePy.exe'
 
 # build options
-directory = 'C:/Users/MarioRaul/Desktop/ConcretePy Builds/build - {}.{:02d}.{:02d}/exe.win32-3.6/'.format(year, month, day)
+directory = 'C:/Users/MarioRaul/Desktop/ConcretePy Builds/build - {}.{:02d}.{:02d}/exe.win32-3.6/'.format(year, month,
+                                                                                                          day)
 packages = ['matplotlib', 'atexit', 'PyQt5.QtCore', 'tkinter', 'numpy']
 includes = []
 include_files = [os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tk86t.dll'),
                  os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tcl86t.dll'),
                  './img/icon_64.ico',
                  'C:/Python36/Lib/site-packages/ConcretePy/save',
+                 'C:/Python36/Lib/site-packages/ConcretePy/gui',
                  'C:/Python36/Lib/site-packages/ConcretePy/img']
 excludes = ['zmq']
 zip_include_packages = ['asncio', 'ctypes', 'collections', 'curses', 'dateutil', 'distutils', 'ConcretePy', 'email',

@@ -4,6 +4,6 @@
 
 Viga 1
 Viga(1, 12.35, 0.6, 0.15, [0.0, 5.2, 9.35, 12.35])
-C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/V1-ELU-M.txt
-C:/Python36/Lib/site-packages/ConcretePy/save/diagrams/V1-ELU-V.txt
+./save/diagrams/V1-ELU-M.txt
+./save/diagrams/V1-ELU-V.txt
 
