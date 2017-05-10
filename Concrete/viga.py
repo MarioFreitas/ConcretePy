@@ -254,6 +254,9 @@ class Momento:
         self.verDef = None
         self.flecha = None
 
+        self.Mr = None
+        self.s_max = None
+
         self.limitar_diagrama_momentos()
 
     def __str__(self):
@@ -371,6 +374,7 @@ class Momento:
 
     def verificar_els_fissura(self):
         Mr = 0.25 * self.bw * (self.h ** 2) * self.config.fctk_inf
+        self.Mr = Mr
         if self.Msd < Mr:
             self.verFissura = 'Não há formação de fissura'
             return 'Não há formação de fissura'
@@ -382,6 +386,7 @@ class Momento:
             return 'Abertura de fissura ok'
         else:
             s_max = espacamento_max_fissura[diametro]
+            self.s_max = s_max
             if self.armadura.espacamento <= s_max:
                 self.verFissura = 'Abertura de fissura ok'
                 return 'Abertura de fissura ok'
@@ -410,7 +415,8 @@ class Momento:
         alfa_f = ksi_t
         fdif = alfa_f * fi
         ftotal = fi + fdif
-
+        self.fdif = fdif
+        self.ftotal = ftotal
         if ftotal < self.l / 250:
             self.verDef = True
             return True
@@ -442,6 +448,7 @@ class Momento:
                     ii = 0
                 else:
                     ii = i
+
                 i = ii
                 i_esq = i
                 break
@@ -545,6 +552,7 @@ class ArmaduraFlexao:
     def __str__(self):
         s = f'{self.numero_barras} barras de {self.diametro*1e3} mm dispostas em {self.linhas} linhas\n'
         s += f'Espaçamento: {self.espacamento*100:.2f} cm\n'
+        s += f'Altura útil: {self.d*100:.2f} cm\n'
         s += f'Área de aço calculada: {self.As_calc*1e4:.2f} cm²\nÁrea de aço adotada: {self.As_adotada*1e4:.2f} cm²\n'
 
         l1 = self.comprimento_l1

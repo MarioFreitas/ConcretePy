@@ -39,7 +39,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.show()
 
         # DEBUG OPTIONS
-        DEBUG = False
+        DEBUG = True
         if DEBUG:
             ### Lajes ###
             # Caracterização
@@ -127,6 +127,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Dimensionamento
             self.actionDimensionar_Lajes.trigger()
 
+            for i in range(len(self.inputData.lajes)):
+                self.kalmanok_le_els_laje.setText('0.001')
+                self.verificar_btn_els_laje.click()
+
             ### Vigas ###
             # Carcterização
             self.l_le_carac_viga.setText('12')
@@ -148,6 +152,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             # Dimensionar Cortantes
             self.actionDimensionar_Vigas_Cisalhamento.trigger()
+
+            # ELS
+            for viga in self.inputData.vigas.values():
+                self.sec_cbox_els_viga.setCurrentIndex(0)
+                for sec in viga.momentos.values():
+                    self.flecha_le_els_viga.setText('0.0001')
+                    self.verificar_btn_els_viga.click()
+                    i = self.sec_cbox_els_viga.currentIndex()
+                    if i + 1 < self.sec_cbox_els_viga.count():
+                        self.sec_cbox_els_viga.setCurrentIndex(i + 1)
+                i = self.nviga_cbox_els_viga.currentIndex()
+                if i + 1 < self.nviga_cbox_els_viga.count():
+                    self.nviga_cbox_els_viga.setCurrentIndex(i + 1)
+
+            # Memorial
+            self.actionEscrever_Memorial.trigger()
 
     def open_qss(self, path):
         """
@@ -174,6 +194,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionSalvar_Como.triggered.connect(self.save_file_as)
         self.actionSair.triggered.connect(sys.exit)
         self.actionDevelopment_Tool.triggered.connect(self.dev_tool)
+        self.actionEscrever_Memorial.triggered.connect(self.escrever_memorial)
 
     def init_lajes(self):
         # Ações
@@ -848,6 +869,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QMessageBox.warning(self, error_title, error_msg, QMessageBox.Ok)
 
         self.update_els_laje_text()
+        i = self.nlaje_cbox_els_laje.currentIndex()
+        if i + 1 < self.nlaje_cbox_els_laje.count():
+            self.nlaje_cbox_els_laje.setCurrentIndex(i + 1)
 
     def update_els_laje_text(self):
         s = ''
@@ -1283,8 +1307,133 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except ValueError:
             pass
 
+    def escrever_memorial(self):
+        s = ''
+        s += '1) Lajes\n\n'
 
-# Main
+        for laje in self.inputData.lajes.values():
+            s += f'Laje {laje.numero}\n'
+            s += f'Entrada de Dados\n'
+
+            s += f'Caracterização:\n'
+            s += f'Lx = {laje.lx:.2f} m\n'
+            s += f'Ly = {laje.ly:.2f} m\n'
+            s += f'h = {laje.h:.2f} m\n'
+            s += f'{laje.apoio}\n\n'
+
+            carga = laje.carga
+            s += f'Cargas:\n'
+            s += f'Peso próprio: {carga.peso_proprio/1e3:.2f} kN/m²\n'
+            s += f'Piso: {carga.superior_carga/1e3:.2f} kN/m²\n'
+            s += f'Contrapiso: {carga.contrapiso_carga/1e3:.2f} kN/m²\n'
+            s += f'Forro: {carga.inferior_carga/1e3:.2f} kN/m²\n'
+            s += f'Parede: {carga.parede_carga/1e3:.2f} kN/m²\n'
+            s += f'Carga permanente (g): {carga.carga_permanente/1e3:.2f} kN/m²\n'
+            s += f'Carga de utilização (q): {carga.carga_utilizacao/1e3:.2f} kN/m²\n'
+            s += f'Carga total (p): {carga.carga_total/1e3:.2f} kN/m²\n\n'
+
+            s += f'Coeficientes para Cálculo de Reações:\n'
+            if laje.vx is not None:
+                s += f'\\nux: {laje.vx}\n'
+            if laje.vy is not None:
+                s += f'\\nuy: {laje.vy}\n'
+            if laje.vx_ is not None:
+                s += f'\\nu_y: {laje.vx_}\n'
+            if laje.vy_ is not None:
+                s += f'\\nu_y: {laje.vy_}\n'
+            s += '\n'
+
+            s += f'Coeficientes para Cálculo de Momentos:\n'
+            if laje.mx is not None:
+                s += f'\\mux: {laje.mx}\n'
+            if laje.my is not None:
+                s += f'\\muy: {laje.my}\n'
+            if laje.mx_ is not None:
+                s += f'\\mu_y: {laje.mx_}\n'
+            if laje.my_ is not None:
+                s += f'\\mu_y: {laje.my_}\n'
+            s += '\n'
+
+            s += f'Momentos Positivos e Negativos Compatibilizados:\n'
+            s += f'Vide figura \\fig_compat\n\n'
+
+        s += f'Dimensionamento das Armaduras Longitudinais:\n'
+
+        laje_out = list(self.outputData.momentos_lajes.keys())
+        laje_out.sort()
+
+        for key in laje_out:
+            i = self.outputData.momentos_lajes[key]
+            numer_laje = i.numero_laje
+            tipo = i.tipo
+            armadura = i.armadura
+
+            s += 'Laje {} - Momento {}\n'.format(numer_laje, tipo)
+
+            for j, k in armadura.items():
+                if j is None:
+                    s += '  Armadura:\n    {}\n'.format(str(k))
+                else:
+                    s += '  Vizinho: {} - '.format(j.numero_laje)
+                    s += 'Armadura:\n    {}\n'.format(str(k))
+            s += '\n'
+
+        s += f'Verificação de Estados Limites de Serviço:\n'
+        s += f'Estados Limites de Deformação:\n'
+        for laje in self.inputData.lajes.values():
+            s += f'Laje {laje.numero}\n'
+            s += f'\\omega {laje.omega}\n'
+            s += f'Flecha imediata = {laje.fi*100 :.2f} cm\n'
+            s += f'Flecha diferida = {laje.fdif*100 :.2f} cm\n'
+            s += f'Flecha total = {laje.ftotal*100 :.2f} cm < {laje.lx/250*100 :.2f} cm\n'
+            s += f'Verificação de flecha OK!\n\n'
+
+        s += '2) Vigas\n'
+        for viga in self.inputData.vigas.values():
+            s += f'Viga {viga.numero}\n'
+            s += f'Caracterização\n'
+            s += f'Comprimento: {viga.l:.2f} m\n'
+            s += f'Altura: {viga.h*100:.2f} cm\n'
+            s += f'Largura: {viga.bw*100:.2f} cm\n\n'
+
+            s += f'Carregamento: \n\n\n'
+            s += f'Diagrama de Momentos Fletores: \n\n\n'
+            s += f'Diagrama de Esforços Cisalhante: \n\n\n'
+            s += f'Dimensionamento ao Momento Fletor: \n'
+            for sec in viga.momentos.values():
+                s += f'Seção {sec.id}\n'
+                s += f'{sec.armadura}\n'
+
+            s += f'Dimensionamento ao Esforço Cisalhante: \n'
+            for sec in viga.cortantes.values():
+                s += f'Seção {sec.numero}\n'
+                s += f'{sec}\n'
+
+            s += f'Verificação dos Estados Limites de Serviço: \n'
+            s += f'Estado Limite de Fissuração: \n'
+            for sec in viga.momentos.values():
+                s += f'Seção {sec.id}\n'
+                s += f'Momento de fissuração {sec.Mr/1e3:.2f} kN.m\n'
+                s += f'Diâmetro das barras: {sec.armadura.diametro*1e3:.2f} mm\n'
+                s += f'Espaçamento das barras: {sec.armadura.espacamento*100:.2f} cm\n'
+
+                if sec.s_max is not None:
+                    s += f'Espaçamento máximo: {sec.s_max*100:.2f} cm\n'
+                s += f'{sec.verFissura}\n'
+                s += '\n'
+
+            s += f'Estado Limite de Deformação: \n'
+            for sec in viga.momentos.values():
+                s += f'Seção {sec.id}\n'
+                s += f'Flecha imediata = {sec.flecha*100 :.2f} cm\n'
+                s += f'Flecha diferida = {sec.fdif*100 :.2f} cm\n'
+                s += f'Flecha total = {sec.ftotal*100 :.2f} cm < {sec.l/250*100 :.2f} cm\n'
+                s += f'Verificação de flecha OK!\n\n'
+
+
+        self.memorial_textBrowser.setText(s)
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     GUI = MainWindow()

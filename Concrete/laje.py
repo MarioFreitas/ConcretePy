@@ -48,14 +48,14 @@ class Laje:
     def verificar_els_deformacao(self, omega):
         self.omega = omega
         D = (self.config.Ecs * self.h ** 3) / 12
-        fi = (omega * self.carga.carga_total * self.lx ** 4) / D
+        self.fi = (omega * self.carga.carga_total * self.lx ** 4) / D
 
         ksi_t = 0.68
         alfa_f = ksi_t
-        fdif = alfa_f * fi
-        ftotal = fi + fdif
+        self.fdif = alfa_f * self.fi
+        self.ftotal = self.fi + self.fdif
 
-        if ftotal <= self.lx / 250:
+        if self.ftotal <= self.lx / 250:
             self.verFlecha = True
             return True
         else:
@@ -173,9 +173,9 @@ class Carga:
             self.parede_carga = 0
         elif self.parede_caso == 'Laje em cruz':
             self.parede_carga = self.parede_densidade * self.parede_perimetro * self.parede_altura / (lx * ly)
-        elif self.parede_caso == 'Paralelo ao menor vão':
+        elif self.parede_caso == 'Paralelo ao menor vao':
             self.parede_carga = 2 * self.parede_densidade * self.parede_altura * self.parede_perimetro / (lx ** 2)
-        elif self.parede_caso == 'Perpendicular ao menor vão':
+        elif self.parede_caso == 'Perpendicular ao menor vao':
             raise AttributeError('Dimensionar como viga!')
 
         self.peso_proprio = h * 25000
@@ -201,6 +201,10 @@ class Momento:
         self.armadura = {}
         self.id_compt = self.id_num
         Momento.id_num += 1
+
+    def __str__(self):
+        s = f'{self.momento_compt}'
+        return s
 
     def compatibilizar_momentos(self, other):
         if None in self.momento_compt:

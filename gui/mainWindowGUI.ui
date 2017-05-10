@@ -26,7 +26,7 @@
          <bool>false</bool>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -36,7 +36,7 @@
           <item row="0" column="0">
            <widget class="QTabWidget" name="tabWidget_laje">
             <property name="currentIndex">
-             <number>6</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_4">
              <attribute name="title">
@@ -344,12 +344,12 @@ p, li { white-space: pre-wrap; }
                        </item>
                        <item>
                         <property name="text">
-                         <string>Paralelo ao menor vão</string>
+                         <string>Paralelo ao menor vao</string>
                         </property>
                        </item>
                        <item>
                         <property name="text">
-                         <string>Perpendicular ao menor vão</string>
+                         <string>Perpendicular ao menor vao</string>
                         </property>
                        </item>
                       </widget>
@@ -839,7 +839,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QTabWidget" name="tabWidget_Viga">
             <property name="currentIndex">
-             <number>5</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_9">
              <attribute name="title">
@@ -1206,6 +1206,11 @@ p, li { white-space: pre-wrap; }
          <attribute name="title">
           <string>Memorial de Cálculo</string>
          </attribute>
+         <layout class="QGridLayout" name="gridLayout_35">
+          <item row="0" column="0">
+           <widget class="QTextBrowser" name="memorial_textBrowser"/>
+          </item>
+         </layout>
         </widget>
        </widget>
       </item>
@@ -1257,6 +1262,7 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionDimensionar_Vigas_Flexao"/>
     <addaction name="actionDimensionar_Vigas_Cisalhamento"/>
     <addaction name="actionDimensionar_Pilares"/>
+    <addaction name="actionEscrever_Memorial"/>
    </widget>
    <addaction name="menuArquivo"/>
    <addaction name="menuConfigura_es"/>
@@ -1335,7 +1341,7 @@ p, li { white-space: pre-wrap; }
     <string>Dimensionar Lajes</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+!</string>
+    <string>Ctrl+Shift+F1</string>
    </property>
   </action>
   <action name="actionDimensionar_Vigas_Flexao">
@@ -1343,7 +1349,7 @@ p, li { white-space: pre-wrap; }
     <string>Dimensionar Vigas - Flexão</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+@</string>
+    <string>Ctrl+Shift+F2</string>
    </property>
   </action>
   <action name="actionDimensionar_Pilares">
@@ -1351,7 +1357,7 @@ p, li { white-space: pre-wrap; }
     <string>Dimensionar Pilares</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+$</string>
+    <string>Ctrl+Shift+F4</string>
    </property>
   </action>
   <action name="actionDimensionar_Vigas_Cisalhamento">
@@ -1359,7 +1365,15 @@ p, li { white-space: pre-wrap; }
     <string>Dimensionar Vigas - Cisalhamento</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+#</string>
+    <string>Ctrl+Shift+F3</string>
+   </property>
+  </action>
+  <action name="actionEscrever_Memorial">
+   <property name="text">
+    <string>Escrever Memorial</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+F10</string>
    </property>
   </action>
  </widget>
