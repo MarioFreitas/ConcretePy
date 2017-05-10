@@ -219,6 +219,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.add_btn_carac_viga.clicked.connect(self.add_viga)
         self.remov_btn_carac_viga.clicked.connect(self.rem_viga)
         self.import_btn_momentos_viga.clicked.connect(self.import_momentos_vigas)
+        self.import_btn_cortantes_viga.clicked.connect(self.import_cortantes_vigas)
         self.add_btn_momentos_viga.clicked.connect(self.add_momentos_vigas)
         self.add_btn_cortantes_viga.clicked.connect(self.add_cortantes_vigas)
         self.verificar_btn_els_viga.clicked.connect(self.verificar_els_viga)
@@ -351,8 +352,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 file.readline()
                 viga = eval(file.readline())
                 self.inputData.vigas.update({i: viga})
-                self.inputData.vigas[i].fileNameM = file.readline()
-                self.inputData.vigas[i].fileNameV = file.readline()
+                self.inputData.vigas[i].fileNameM = file.readline().strip('\n')
+                self.inputData.vigas[i].fileNameV = file.readline().strip('\n')
 
 
         # Carregar Lajes na GUI
@@ -383,13 +384,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.update_carac_laje_text()
         self.update_carga_laje_text()
 
-        for i in self.inputData.vigas:
+        for viga in self.inputData.vigas.values():
             n = int(get_text(self.nviga_cbox_carac_viga))
             self.nviga_cbox_carac_viga.addItem(str(n + 1))
             self.nviga_cbox_momentos_viga.addItem(str(n))
             self.nviga_cbox_dim_flex_viga.addItem(str(n))
             self.nviga_cbox_cortantes_viga.addItem(str(n))
             self.nviga_cbox_carac_viga.setCurrentIndex(self.nviga_cbox_carac_viga.currentIndex() + 1)
+            self.import_le_momentos_viga.setText(viga.fileNameM)
+            self.import_le_cortantes_viga.setText(viga.fileNameV)
+            self.add_momentos_vigas()
+            self.add_cortantes_vigas()
 
         self.nviga_cbox_carac_viga.setCurrentIndex(0)
         self.update_carac_viga_text()
@@ -1134,6 +1139,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 s += f'Viga {viga.numero} - Seção {i+1}\n{armadura}\n\n'
 
         self.textBrowser_dim_flex_viga2.setText(s)
+
+    def import_cortantes_vigas(self):
+        n = int(get_text(self.nviga_cbox_cortantes_viga))
+        fileName = QFileDialog.getOpenFileName(self, 'Importar Momento', './save/diagrams',
+                                               filter="Arquivo de Texto(*.txt)")[0]
+        self.import_le_cortantes_viga.setText(fileName)
+        self.add_cortantes_vigas()
 
     def add_cortantes_vigas(self):
         n = int(get_text(self.nviga_cbox_cortantes_viga))

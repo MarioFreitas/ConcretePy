@@ -438,6 +438,11 @@ class Momento:
             i -= 1
             mi = m[i]
             if (mi * m_cent) <= 0:
+                if i == -1:
+                    ii = 0
+                else:
+                    ii = i
+                i = ii
                 i_esq = i
                 break
 
